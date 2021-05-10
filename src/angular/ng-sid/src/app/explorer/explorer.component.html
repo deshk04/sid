@@ -1,0 +1,27 @@
+<div class="sidcontainer">
+    <div
+    *tdLoading="
+      'loadingsidexp';
+      mode: 'indeterminate';
+      type: 'linear';
+      strategy: 'overlay';
+      color: 'primary'
+    "
+  >
+
+    <div *ngIf="!rowSelected">
+        <connectionlist [shownew]="shownew" [filter]="'AWS_S3'" (connection)="selectedConnection($event)">
+        </connectionlist>
+    </div>
+
+    <div *ngIf="rowSelected">
+        <button mat-button color="primary" (click)="backConn()">
+             Connectors  >
+        </button>
+
+        <s3explorer [conn_id]="selectedConnRecord.conn_id">
+        </s3explorer>
+
+    </div>
+    </div>
+</div>

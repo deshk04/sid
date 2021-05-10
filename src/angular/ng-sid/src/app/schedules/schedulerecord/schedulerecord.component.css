@@ -1,0 +1,40 @@
+table, tr {
+    border: 1px solid rgb(27, 149, 170);
+    border-collapse: collapse;
+  }
+
+  th, td {
+    padding: 5px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  button {
+    margin-left: 5px;
+  }
+
+
+  .mat-button, .mat-raised-button, .mat-mini-fab{
+    margin-left: 10px;
+}
+
+.checkbox-margin {
+  margin: 0 10px;
+  margin-left: 20px;
+}
+
+.jobclass {
+  margin-left: 10px;
+}
+
+.white-icon {
+  color: white;
+}
+
+.fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+.card-colored{
+  background-color: #00b2b1;
+}

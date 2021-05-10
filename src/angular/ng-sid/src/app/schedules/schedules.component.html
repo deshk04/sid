@@ -1,0 +1,18 @@
+<div class="sidcontainer">
+
+  <div *tdLoading="'loadingsidschedule'; mode:'indeterminate';
+  type:'linear'; strategy:'overlay'; color:'primary'">
+
+    <div *ngIf="!rowSelected">
+      <schedulelist (select)="selectedSchedule($event)">
+      </schedulelist>
+    </div>
+    <!-- <div *ngIf="rowSelected">
+      <schedulerecord [scheduleRecord]="selectedScheduleRecord" (close)="closeRecord($event)">
+      </schedulerecord>
+    </div> -->
+
+
+  </div>
+
+</div>

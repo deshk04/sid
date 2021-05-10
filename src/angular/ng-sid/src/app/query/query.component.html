@@ -1,0 +1,29 @@
+<div class="sidcontainer">
+    <div *tdLoading="
+      'loadingsidquery';
+      mode: 'indeterminate';
+      type: 'linear';
+      strategy: 'overlay';
+      color: 'primary'
+    ">
+
+        <div *ngIf="!rowSelected">
+            <connectionlist [shownew]="shownew"
+            [filter]="'Salesforce'"
+            (connection)="selectedConnection($event)">
+            </connectionlist>
+        </div>
+        <div *ngIf="rowSelected">
+            <button mat-button color="primary" (click)="backConn()">
+                Connectors >
+            </button>
+            <mat-card>
+                <salesforcequery [job]="sfjob" [showdownload]="true" (status)="SfQuery($event)">
+                </salesforcequery>
+
+            </mat-card>
+
+        </div>
+
+    </div>
+</div>

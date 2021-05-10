@@ -1,0 +1,103 @@
+<div class="sidcontainer">
+  <div *tdLoading="
+      'loadingsideditjob';
+      mode: 'indeterminate';
+      type: 'linear';
+      strategy: 'overlay';
+      color: 'primary'
+    ">
+    <div *ngIf="dataloadedflag">
+      <div layout="row">
+        <mat-card class="card-colored" flex>
+          <mat-card-header>
+            <button mat-button color="primary" style="color: white" disabled>
+              {{ selectedJobRecord.job_name }}
+            </button>
+            <span class="fill-remaining-space"></span>
+            <button mat-mini-fab color="accent" title="Reset Job" (click)="resetJob()">
+              <mat-icon style="color: white" color="warn">
+                change_circle</mat-icon>
+            </button>
+
+          </mat-card-header>
+        </mat-card>
+      </div>
+      <div *ngIf="newJobFlag" layout="row">
+        <span class="fill-remaining-space"></span>
+        <mat-slide-toggle color="accent"
+        [(ngModel)]="adhocJobFlag" [checked]="adhocJobFlag"
+          (change)="adhocJobToggle($event)">Adhoc job
+        </mat-slide-toggle>
+
+      </div>
+
+      <div class="classcomponent" layout="row">
+        <mat-card flex>
+          <mat-form-field>
+            <input matInput placeholder="Job Name" [(ngModel)]="selectedJobRecord.job_name"
+              [ngModelOptions]="{ standalone: true }" />
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Email Distribution List" [(ngModel)]="selectedJobRecord.tolist"
+              [ngModelOptions]="{ standalone: true }" />
+          </mat-form-field>
+
+        </mat-card>
+      </div>
+
+      <div *ngIf="adhocJobFlag" class="classcomponent" layout="row">
+        <destselector
+        [job]="selectedJobRecord"
+        [showprevious]="false"
+        (ostatus)="DestinationDetails($event)">
+        </destselector>
+
+      </div>
+      <div *ngIf="!adhocJobFlag">
+        <div class="classcomponent" [ngClass]="{'disabled':jstep != 1}">
+          <mat-card color flex>
+            <sourceselector [job]="selectedJobRecord" (ostatus)="sourceDetails($event)">
+            </sourceselector>
+          </mat-card>
+        </div>
+        <div class="classcomponent" [ngClass]="{'disabled':jstep != 2}">
+          <mat-card flex>
+
+            <destselector [job]="selectedJobRecord" (ostatus)="DestinationDetails($event)">
+            </destselector>
+
+          </mat-card>
+
+        </div>
+        <div class="classcomponent" [ngClass]="{'disabled':jstep != 3}">
+          <mat-card flex>
+            <mapselector [job]="selectedJobRecord" (ostatus)="mapDetails($event)">
+            </mapselector>
+          </mat-card>
+
+        </div>
+
+
+      </div>
+      <div class="classcomponent" [ngClass]="{'disabled':jstep != 4}">
+        <mat-card>
+          <button mat-raised-button color="accent" (click)="cancel()">
+            Previous
+          </button>
+          <span class="fill-remaining-space"></span>
+
+          Accept all changes? &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          <button mat-raised-button color="warn"
+          (click)="submitForm()" [disabled]="false">
+            Submit
+          </button>
+
+        </mat-card>
+      </div>
+
+
+    </div>
+  </div>
+</div>

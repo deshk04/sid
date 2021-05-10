@@ -1,0 +1,15 @@
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+alias dng='docker exec -it sidng_container bash'
+alias dweb='docker exec -it sidweb_container bash'
+alias reload='touch /sid/ops/workspace/reload.sid.txt'
+alias app='cd /sid/src/apps'
+alias web='cd /sid/src/django/web'
+alias ang='cd /sid/src/angular/ng-sid/src/'
+alias cdapp='function _app(){ cd "/sid/src/apps/$1";};_app'
+export PYTHONPATH='/sid/src'
+alias lr='ls -ltr'
+alias c='clear'
+export PG_DATABASE=$POSTGRES_DB
+export PG_USER=$POSTGRES_USER
+export PG_PASSWORD=$POSTGRES_PASSWORD
+export PG_HOST=$POSTGRES_HOST

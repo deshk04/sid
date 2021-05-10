@@ -1,0 +1,15 @@
+import { Pipe, PipeTransform } from '@angular/core';
+
+/* 
+  not all of urls have http:// or https:// as a prefix
+  so need to prefix those links with // to work with href
+*/
+@Pipe({ name: 'fixUrl' })
+export class FixUrl implements PipeTransform {
+  transform(url: string): string {
+    if (!/^https?:\/\//i.test(url)) {
+        return '//' + url;
+    }
+    return url;
+  }
+}

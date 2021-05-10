@@ -1,0 +1,56 @@
+<div *tdLoading="'loadingsidconn'; mode:'indeterminate';
+type:'linear'; strategy:'overlay'; color:'primary'">
+    <div *ngIf="dataloaded">
+        <div layout="row">
+            <button mat-button color="primary" (click)="searchConn()">Back to connection</button>
+        </div>
+
+        <div layout="row">
+
+            <div layout="column" style="padding-left: 20px;">
+                <mat-card>
+                    <span layout="row">
+                        <mat-card-title>Setup a new connection</mat-card-title>
+                    </span>
+
+                    <span layout="row">
+
+                        <mat-list>
+                            <div mat-subheader>Please Select Connector</div>
+                            <mat-list-item *ngFor="let item of dimConnections" style="cursor: pointer"
+                                (click)="connSelected(item)">
+                                <img matListAvatar [src]="item.conn_logo_path" />
+                                <!-- <div mat-line /> -->
+                                <div mat-line>{{item.conn_name}}</div>
+                                <div mat-line> {{item.description}} </div>
+                            </mat-list-item>
+                        </mat-list>
+                        <!-- <span *ngIf="allowForm" layout="column">
+
+                <div mat-subheader>Please fill the connection details</div>
+
+        </span> -->
+                    </span>
+                </mat-card>
+            </div>
+            <div layout="column" style="padding-left: 20px;" flex>
+
+                <div *ngIf="allowForm">
+                    <div *ngIf="selectedConn.conn_name == 'Salesforce' ">
+                        <salesforce-connection [connector]="sfInputRecord">
+                      </salesforce-connection>
+
+                      </div>
+                    <div *ngIf="selectedConn.conn_name == 'AWS_S3' ">
+                        <awss3-connection [connector]="s3InputRecord">
+                        </awss3-connection>
+                      </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,15 @@
+[Unit]
+Description=uWSGI in Emperor mode
+After=syslog.target
+
+[Service]
+ExecStart = /usr/local/bin/uwsgi --ini /sid/config/uwsgi/emperor.ini
+ExecStop = kill -INT `cat /sid/ops/workspace/uwsgi.pid`
+ExecReload = kill -TERM `cat /sid/ops/workspace/uwsgi.pid`
+Restart = always
+Type = notify
+NotifyAccess = main
+PIDFile = /sid/ops/workspace/uwsgi.pid
+
+[Install]
+WantedBy=multi-user.target

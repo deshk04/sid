@@ -1,0 +1,23 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* ::ng-deep .mat-card{
+  border: 1px solid #000;
+  border-radius: 20px !important;
+} */
+/* @import "~ng-snotify/styles/material"; */
+
+.mat-card{
+  border: 1px;
+  border-radius: 10px !important;
+}
+
+.sidcontainer .mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+.sid-snackbar {
+  background: #2196F3;
+}
+.fill-remaining-space {
+  flex: 1 1 auto;
+}

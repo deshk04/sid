@@ -1,0 +1,116 @@
+
+  <td-layout [mode]="'side'" [opened]="true" [sidenavWidth]="'257px'">
+    <div *tdLoading="'loadinglayoutsid'; mode:'indeterminate';
+    type:'linear'; strategy:'overlay'; color:'primary'">
+  </div>
+
+  <div td-sidenav-content>
+    <div *ngIf="userLoggedStatus">
+
+    <td-navigation-drawer class="font-colour"
+    flex
+    color="primary"
+    avatar="{{userProfileRecord.photo}}"
+    name="{{userProfileRecord.first_name}} {{userProfileRecord.last_name}}"
+    email="{{userProfileRecord.email_id}}"
+  >
+    </td-navigation-drawer>
+   </div>
+
+    <mat-nav-list>
+
+      <!-- <mat-list-item>
+        <span>
+          <img matListAvatar [src]="userProfileRecord.photo">
+        </span>
+      </mat-list-item> -->
+
+      <div *ngIf="!userLoggedStatus">
+
+        <p matLine>
+          &nbsp;&nbsp;&nbsp;Please login
+        </p>
+      </div>
+      <!-- <div *ngIf="userLoggedStatus">
+
+        <p matLine>
+          &nbsp;&nbsp;G'day&nbsp;&nbsp;{{this.userProfileRecord.first_name}}
+        </p>
+      </div> -->
+
+
+    </mat-nav-list>
+    <div *ngIf="userLoggedStatus">
+
+        <mat-nav-list>
+          <a mat-list-item class="active" [routerLink]="[ '/connections']" [routerLinkActive]="['is-active']">
+            <mat-icon matListIcon color="primary">share</mat-icon>connectors
+          </a>
+        </mat-nav-list>
+
+      <mat-nav-list>
+        <a mat-list-item class="active" [routerLink]="[ '/jobs']" [routerLinkActive]="['is-active']">
+          <mat-icon matListIcon color="primary">cloud_done</mat-icon>Jobs
+        </a>
+      </mat-nav-list>
+
+      <mat-nav-list>
+        <a mat-list-item class="active" [routerLink]="[ '/joblogs']" [routerLinkActive]="['is-active']">
+          <mat-icon matListIcon color="primary">text_snippet</mat-icon>Logs
+        </a>
+      </mat-nav-list>
+
+      <mat-nav-list>
+        <a mat-list-item class="active" [routerLink]="[ '/schedule']" [routerLinkActive]="['is-active']">
+          <mat-icon matListIcon color="primary">share</mat-icon>Schedule
+        </a>
+      </mat-nav-list>
+
+      <mat-nav-list>
+        <a mat-list-item class="active" [routerLink]="[ '/explorer']" [routerLinkActive]="['is-active']">
+          <mat-icon matListIcon color="primary">snippet_folder</mat-icon>Explorer
+        </a>
+      </mat-nav-list>
+
+      <mat-nav-list>
+        <a mat-list-item class="active" [routerLink]="[ '/query']" [routerLinkActive]="['is-active']">
+          <mat-icon matListIcon color="primary">query_stats</mat-icon>Query
+        </a>
+      </mat-nav-list>
+
+      <mat-nav-list>
+        <a mat-list-item class="active" [routerLink]="[ '/settings']" [routerLinkActive]="['is-active']">
+          <mat-icon matListIcon color="primary">settings</mat-icon>Settings
+        </a>
+      </mat-nav-list>
+
+      <mat-nav-list>
+        <a mat-list-item class="active" [routerLink]="[ '/logout']">
+          <mat-icon matListIcon color="primary">exit_to_app</mat-icon>Logout
+        </a>
+      </mat-nav-list>
+
+    </div>
+    <div *ngIf="!userLoggedStatus">
+
+      <mat-nav-list>
+        <a mat-list-item class="active" [routerLink]="[ '/login']">
+          <mat-icon matListIcon color="primary">login</mat-icon>Login
+        </a>
+      </mat-nav-list>
+    </div>
+
+  </div>
+
+
+  <mat-sidenav-container fullscreen>
+
+    <ng-snotify></ng-snotify>
+    <div tdMediaToggle="gt-xs" [mediaClasses]="[ 'push-md']" class="layout-container">
+      <router-outlet></router-outlet>
+    </div>
+
+  </mat-sidenav-container>
+
+
+</td-layout>

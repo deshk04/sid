@@ -1,0 +1,19 @@
+.rcontainer {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+  }
+
+  mat-grid-tile {
+    background: #00b2b1;
+  }
+
+  /* .flex-row {
+    display: flex;
+    flex-direction: row;
+
+    > div {
+      flex: 50%;
+      padding: 10px;
+    }
+  } */

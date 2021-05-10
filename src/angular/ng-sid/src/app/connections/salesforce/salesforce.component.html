@@ -1,0 +1,82 @@
+<div *tdLoading="'loadingsiddimconn'; mode:'indeterminate';
+type:'linear'; strategy:'overlay'; color:'primary'">
+
+    <div *ngIf="dataloaded && showForm" class="sidcontainer">
+
+        <mat-card>
+            <mat-card-title>Salesforce connection</mat-card-title>
+            <div mat-subheader>Connection details
+                <span class="fill-remaining-space"></span>
+                <button class="rightsection"
+                title="Refresh Objects from Salesforce"
+                  mat-mini-fab
+                  color="primary"
+                  (click)="refreshModels()"
+                >
+                  <mat-icon>refresh</mat-icon>
+                </button>
+
+            </div>
+
+            <form [formGroup]="connectionForm">
+                <div layout="row">
+                    <mat-form-field flex>
+                        <input matInput placeholder="Connector Name" formControlName="name" />
+                    </mat-form-field>
+
+                    <mat-form-field flex>
+                        <mat-select placeholder="System Type" formControlName="conn_system_type">
+                            <mat-option *ngFor="let type of dimSystemTypes" [value]="type.system_type">
+                                {{ type.description }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                </div>
+                <div layout="row">
+                    <mat-form-field flex>
+                        <input matInput placeholder="User Name (email)" formControlName="auth_username" type="email"/>
+
+                    </mat-form-field>
+                    <mat-form-field flex>
+                        <mat-icon color="primary"  (click)="toggleSensitiveField('password')" matSuffix>
+                            visibility</mat-icon>
+                        <input matInput placeholder="Password" type="password" minlength="4"
+                            id="password"
+                            formControlName="auth_password" />
+                    </mat-form-field>
+                </div>
+                <div layout="row">
+                    <mat-form-field flex>
+                        <mat-icon color="primary"  (click)="toggleSensitiveField('security_token')" matSuffix>
+                            visibility</mat-icon>
+                        <input matInput placeholder="Security Token" type="password" minlength="4"
+                            id="security_token"
+                            formControlName="security_token" />
+                    </mat-form-field>
+                </div>
+
+                <div layout="row">
+                    <mat-form-field flex>
+                        <input matInput placeholder="Host url" formControlName="auth_host" />
+                    </mat-form-field>
+                </div>
+                <mat-divider></mat-divider>
+                <div layout="row" class="pad-sm" class="top-margin-10px">
+                    <button mat-fab color="primary" (click)="onSubmit()">
+                        <mat-icon>done</mat-icon>
+                    </button>
+                    &nbsp;
+                    <button mat-fab color="warn" (click)="onCancel()">
+                        <mat-icon>clear</mat-icon>
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </mat-card>
+
+    </div>
+</div>

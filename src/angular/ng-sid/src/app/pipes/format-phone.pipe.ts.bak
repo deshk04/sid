@@ -1,0 +1,29 @@
+import { Pipe, PipeTransform } from '@angular/core';
+
+
+@Pipe({name: 'formatPhone'})
+export class FormatPhone implements PipeTransform {
+    transform(phone: string): string {
+        // remove all non-numeric chars including spaces
+        let cleanedPhone = phone.replace(/[^0-9\.]+/g, '');
+        const landLineRe = /(\d{2})[ ]?(\d{4})[ ]?(\d{4})/g;
+        const altLandLineRe = /(\d{4})[ ]?(\d{3})[ ]?(\d{3})/g;
+        const localLineRe = /(\d{2})[ ]?(\d{2})[ ]?(\d{2})/g;
+        const substr = '$1 $2 $3'; 
+        
+        if (['02', '03', '07', '08'].includes(cleanedPhone.substring(0, 2))) {
+            cleanedPhone = cleanedPhone.replace(landLineRe, substr);
+        } else if (['1300', '1800', '1900', '1902'].includes(cleanedPhone.substring(0, 4))) {
+            cleanedPhone = cleanedPhone.replace(altLandLineRe, substr);
+        } else if (['13'].includes(cleanedPhone.substring(0, 2))) {
+            cleanedPhone = cleanedPhone.replace(localLineRe, substr);
+        } else if (['04'].includes(cleanedPhone.substring(0, 2))) {
+            cleanedPhone = cleanedPhone.replace(altLandLineRe, substr);
+        } else {
+            // if none of the above, retain original formatting
+            cleanedPhone = phone;
+        }
+
+        return cleanedPhone;
+    }
+}

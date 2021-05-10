@@ -1,0 +1,18 @@
+version: '3.7'
+# docker volume create --name pgdata --opt device=/Users/Shared/sid/storage/pgdata --opt type=none --opt o=bind
+
+services:
+  web:
+    image: django
+    build:
+      context: .
+      dockerfile: ./django/Dockerfile
+    container_name: sid_web_container
+    environment:
+      - TZ=Australia/Melbourne
+    env_file: ./.env
+    volumes:
+      - ${PROJ_ROOT}:/sid/
+    ports:
+      - "7080:7080"
+    # user: 1001:1001

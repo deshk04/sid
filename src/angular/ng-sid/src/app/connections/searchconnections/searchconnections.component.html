@@ -1,0 +1,25 @@
+<div class="rcontainer">
+  <div *ngIf="!rowSelected">
+    <connectionlist
+    [shownew]="shownew"
+    [filter]="'all'" (connection)="selectedConnection($event)">
+    </connectionlist>
+  </div>
+
+  <div *ngIf="rowSelected">
+    <div *ngIf="selectedConnRecord.conn_type == 'Salesforce'">
+      <salesforce-connection
+        [connector]="selectedConnRecord"
+        (close)="closeRecord($event)"
+      >
+      </salesforce-connection>
+    </div>
+    <div *ngIf="selectedConnRecord.conn_type == 'AWS_S3'">
+      <awss3-connection
+        [connector]="selectedConnRecord"
+        (close)="closeRecord($event)"
+      >
+      </awss3-connection>
+    </div>
+  </div>
+</div>

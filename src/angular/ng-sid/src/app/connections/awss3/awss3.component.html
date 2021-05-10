@@ -1,0 +1,78 @@
+<div *tdLoading="'loadingsiddimconn'; mode:'indeterminate';
+type:'linear'; strategy:'overlay'; color:'primary'">
+
+<div *ngIf="dataloaded && showForm" class="sidcontainer">
+
+    <mat-card>
+        <mat-card-title>S3 connection</mat-card-title>
+        <div mat-subheader>Connection details</div>
+
+        <!-- <div *ngIf="hasError" class="top-margin-10px">
+            <td-message label="Error!" sublabel="{{errorMessages}}" color="warn" icon="error">
+            </td-message>
+        </div> -->
+
+        <form [formGroup]="connectionForm">
+            <div layout="row">
+                <mat-form-field flex>
+                    <input matInput placeholder="Connector Name" formControlName="name" />
+                </mat-form-field>
+
+                <mat-form-field flex>
+                    <mat-select placeholder="System Type" formControlName="conn_system_type">
+                        <mat-option *ngFor="let type of dimSystemTypes" [value]="type.system_type">
+                            {{ type.description }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+            </div>
+            <div layout="row">
+                <mat-form-field flex>
+                    <mat-icon color="primary"  (click)="toggleSensitiveField('access_key')" matSuffix>
+                        visibility</mat-icon>
+                    <input matInput placeholder="Access Key" type="password" minlength="4"
+                        id="access_key"
+                        formControlName="aws_access_key_id" />
+                </mat-form-field>
+                <mat-form-field flex>
+                    <mat-icon color="primary"  (click)="toggleSensitiveField('secret_key')" matSuffix>
+                        visibility</mat-icon>
+                    <input matInput placeholder="Secret Key" type="password" minlength="4"
+                        id="secret_key"
+                        formControlName="aws_secret_access_key" />
+                </mat-form-field>
+            </div>
+            <div layout="row">
+                <mat-form-field flex>
+                    <input matInput placeholder="Bucket Name" minlength="4"
+                        formControlName="bucket_name" />
+                </mat-form-field>
+                <mat-form-field flex>
+                    <input matInput placeholder="AWS Region" minlength="4"
+                        formControlName="aws_region" />
+                </mat-form-field>
+
+            </div>
+
+            <mat-divider></mat-divider>
+            <div layout="row" class="pad-sm" class="top-margin-10px">
+                <button mat-fab color="primary" (click)="onSubmit()">
+                    <mat-icon>done</mat-icon>
+                </button>
+                &nbsp;
+                <button mat-fab color="warn" (click)="onCancel()">
+                    <mat-icon>clear</mat-icon>
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </mat-card>
+
+</div>
+
+
+</div>

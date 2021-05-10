@@ -1,0 +1,8 @@
+/* .mat-grid-tile {
+  background: #00b2b1;
+} */
+
+.mat-grid-tile {
+  border: solid 2px #00b2b1;
+  border-radius: 10px;
+}

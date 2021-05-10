@@ -1,0 +1,74 @@
+<div class="sidcontainer">
+
+    <div *tdLoading="'loadingsid'; mode:'indeterminate';
+  type:'linear'; strategy:'overlay'; color:'primary'">
+
+
+        <div *ngIf="dataloaded">
+            <mat-card>
+                <table style="width:80%">
+                    <tr>
+                        <th>Name</th>
+                        <th>Run Date</th>
+                        <th>Status</th>
+                        <th>Start time</th>
+                        <th>End time</th>
+                    </tr>
+                    <tr>
+                        <td>{{selectedRec.job_name}}</td>
+                        <td>{{selectedRec.run_date}}</td>
+                        <td>{{selectedRec.status}}</td>
+                        <td>{{selectedRec.start_date}}</td>
+                        <td>{{selectedRec.end_date}}</td>
+
+                    </tr>
+                </table>
+                <mat-divider></mat-divider>
+                <br>
+                <table style="width:80%">
+                    <tr>
+                        <th>File Name</th>
+                        <th>Status Message</th>
+                    </tr>
+                    <tr>
+                        <td>{{selectedRec.filename}}</td>
+                        <td>{{selectedRec.message}}</td>
+                    </tr>
+                </table>
+                <mat-divider></mat-divider>
+                <br>
+                <table style="width:80%">
+                    <tr>
+                        <th>Record Count</th>
+                        <th>No. of Success</th>
+                        <th>No. of Failure</th>
+                        <th>No. of Warning</th>
+
+                    </tr>
+                    <tr>
+                        <td>{{selectedRec.total_count}}</td>
+                        <td>{{selectedRec.success_count}}</td>
+                        <td>{{selectedRec.failure_count}}</td>
+                        <td>{{selectedRec.warning_count}}</td>
+
+                    </tr>
+                </table>
+                <mat-divider></mat-divider>
+                <br>
+                    <button mat-raised-button color="primary" (click)="downLoadLog()" [disabled]="!downloadfile">
+                        Download Log File
+                    </button>&nbsp;&nbsp;
+                    <button mat-raised-button color="primary" (click)="runfailedRecs()" [disabled]="!downloadfile">
+                        Reprocess failed Records
+                    </button>&nbsp;&nbsp;
+<!--
+                <button mat-raised-button color="warn" (click)="cancelLog()">
+                    Cancel
+                </button> -->
+
+            </mat-card>
+
+        </div>
+
+    </div>
+</div>

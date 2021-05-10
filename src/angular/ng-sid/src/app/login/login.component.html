@@ -1,0 +1,61 @@
+<div *tdLoading="'loadingauth'; mode:'indeterminate';
+        type:'linear'; strategy:'overlay'; color:'primary'">
+
+    <div *ngIf="!authSuccess" >
+
+        <mat-card class="sid-card basic-container">
+            <form>
+
+            <mat-card-title color="primary" layout="row" layout-align="start center"><span class="md-title">Login</span>
+            </mat-card-title>
+            <mat-card-subtitle>Sign In with Your Credentials</mat-card-subtitle>
+            <!-- <mat-divider></mat-divider> -->
+            <mat-card-content class="push-bottom-none">
+
+                <div layout="row" cellspacing="1">
+                    <mat-form-field flex>
+                        <mat-icon matPrefix color="primary">account_circle
+                        </mat-icon>
+                        <input matInput
+                            placeholder="User id"
+                            [(ngModel)]="userRecord.username"
+                            name = "username"
+                            required
+                            />
+                    </mat-form-field>
+
+                </div>
+                <div layout="row">
+                    <mat-form-field flex>
+                        <mat-icon matPrefix color="primary">vpn_key
+                        </mat-icon>
+                        <input matInput required
+                            type="password"
+                            [(ngModel)]="userRecord.password" id="password"
+                            name="password"
+                            minlength="5"
+                            />
+                    </mat-form-field>
+                </div>
+
+                </mat-card-content>
+                <mat-divider></mat-divider>
+                <mat-card-actions>
+                    <div layout="row" class="pad-sm">
+                        <button mat-raised-button flex color="primary"
+                         class="text-upper"
+                        (click)="onSubmit()">Login
+                        </button>
+                    </div>
+                </mat-card-actions>
+            </form>
+
+        </mat-card>
+
+    </div>
+    <ng-template *ngIf="authSuccess">
+        <label>You are logged in</label>
+    </ng-template>
+
+
+</div>

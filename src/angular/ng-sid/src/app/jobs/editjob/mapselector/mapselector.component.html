@@ -1,0 +1,137 @@
+<div class="sidcontainer">
+    <div *tdLoading="
+        'loadingsidmapjob';
+        mode: 'indeterminate';
+        type: 'linear';
+        strategy: 'overlay';
+        color: 'primary'
+      ">
+        <br />
+        <div *ngIf="showSelectedMapRecord">
+            <div [formGroup]="selectedMapRecord">
+                <div layout="row">
+                    <span class="fill-remaining-space"></span>
+                    <button mat-mini-fab color="warn" class="white-icon" (click)="deleteMap()">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+
+                <div layout="row">
+                    <mat-form-field>
+                        <mat-select matInput placeholder="Source Field" formControlName="source_field"
+                            [disabled]="sourceFieldDisable">
+                            <mat-option *ngFor="let elem of job.sourcefields" [value]="elem.field_name">
+                                {{ elem.field_name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-select matInput placeholder="Map Type" formControlName="map_type" (selectionChange)="mapChange($event.value)">
+                            <mat-option *ngFor="let type of dimMapTypes" [value]="type.map_type">
+                                {{ type.map_type }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput placeholder="Map Value" formControlName="map_value" />
+                    </mat-form-field>
+                </div>
+                <div layout="row" *ngIf="selectedMapRecord.value.map_type == 'lookup' && job.dest_config.conn_type == 'Salesforce'">
+                    <mat-form-field>
+                        <mat-select matInput placeholder="Lookup Model" (selectionChange)="modelChange($event.value)"
+                            formControlName="lookup_model">
+                            <mat-option *ngFor="let type of job.models" [value]="type.name">
+                                {{ type.name }} ( {{ type.label }} )
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-select matInput placeholder="Lookup Join Field" formControlName="lookup_join_field">
+                            <mat-option *ngFor="let type of lookupFields" [value]="type.field_name">
+                                {{ type.field_name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-select matInput placeholder="Lookup Return Field" formControlName="lookup_return_field">
+                            <mat-option *ngFor="let type of lookupFields" [value]="type.field_name">
+                                {{ type.field_name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div layout="row">
+                    <mat-form-field>
+                        <input matInput placeholder="Destination Model" formControlName="dest_model" readonly />
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-select matInput placeholder="Destation Field" formControlName="dest_field">
+                            <mat-option *ngFor="let type of job.destfields" [value]="type.field_name">
+                                {{ type.field_name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div layout="row">
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <button mat-mini-fab color="primary" class="white-icon" (click)="updateMap()">
+                        <mat-icon>done</mat-icon>
+                    </button>
+                    &nbsp;
+                    <button mat-mini-fab color="warn" class="white-icon" (click)="cancelMap()">
+                        <mat-icon>clear</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="!showSelectedMapRecord" layout="row">
+            <button mat-mini-fab color="primary"
+            title="Auto map fields"
+            class="white-icon" (click)="mapFields()">
+                <mat-icon>sync_alt</mat-icon>
+            </button>
+
+            <span class="fill-remaining-space"></span>
+            <button mat-mini-fab color="primary" class="white-icon" (click)="addNewMap()">
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
+
+        <div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
+            <td-search-box #searchBox backIcon="arrow_back" class="push-right-sm" placeholder="Search"
+                (searchDebounce)="search($event)" [alwaysVisible]="true" flex>
+            </td-search-box>
+        </div>
+        <mat-divider></mat-divider>
+
+        <td-data-table [sortable]="true" [clickable]="true" [selectable]="false" (rowClick)="selectMapRecord($event)"
+            [data]="filteredData" [columns]="configWidthColumns" [style.height.px]="400" [sortBy]="sortBy"
+            (sortChange)="sort($event)" [sortOrder]="sortOrder">
+        </td-data-table>
+        <td-paging-bar #pagingBar [pageSize]="pageSize" [total]="filteredTotal" (change)="page($event)">
+            <span hide-xs>Rows per page:</span>
+            <mat-select [style.width.px]="50" [(ngModel)]="pageSize" [ngModelOptions]="{ standalone: true }"
+                name="pagesize">
+                <mat-option *ngFor="let size of [50, 100, 200, 500]" [value]="size">
+                    {{ size }}
+                </mat-option>
+            </mat-select>
+            {{ pagingBar.range }}
+            <span hide-xs>of {{ pagingBar.total }}</span>
+        </td-paging-bar>
+
+        <div layout="row">
+            <button  mat-raised-button color="accent" (click)="cancel()">
+                Previous
+              </button>
+
+            <span class="fill-remaining-space"></span>
+            <button mat-raised-button color="accent" (click)="submitForm()" [disabled]="false">
+                Next
+            </button>
+        </div>
+
+
+    </div>
+</div>

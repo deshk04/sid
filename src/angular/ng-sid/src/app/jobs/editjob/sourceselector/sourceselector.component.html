@@ -1,0 +1,236 @@
+<div *tdLoading="
+    'loadingsourcesid';
+    mode: 'indeterminate';
+    type: 'linear';
+    strategy: 'overlay';
+    color: 'primary'
+  ">
+  <div *ngIf="dataloaded">
+
+    <div layout="row">
+      <button mat-button color="primary" (click)="toggleEditFlag()">
+        <mat-icon color="primary"> mode</mat-icon>
+        Change Source Connector
+      </button>
+    </div>
+
+    <div *ngIf="!editFlag" layout="row">
+      <div layout="column">
+        <mat-list>
+          <mat-list-item>
+            <img matListAvatar [src]="job.source_config.conn_logo_path" />
+            <div mat-line>
+              {{ job.source_config.conn_name }}
+            </div>
+            <div mat-line>
+              System Type:
+              {{ job.source_config.conn_system_type }}
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </div>
+      <div layout="column" class="rightsection">
+        <div *ngIf="job.source_config.conn_type == 'Salesforce'">
+          <mat-form-field>
+            <textarea matInput placeholder="Query"
+              [(ngModel)]="job.source_config.query.query"
+              [ngModelOptions]="{ standalone: true }"
+              cdkTextareaAutosize cdkAutosizeMinRows="10"
+              cdkAutosizeMaxRows="40" disabled></textarea>
+          </mat-form-field>
+
+        </div>
+        <div *ngIf="job.source_config.conn_type != 'Salesforce'">
+          <div layout="row">
+            <mat-form-field>
+              <input matInput placeholder="FileNameStartsWith" [(ngModel)]="job.source_config.filestartwith"
+                [ngModelOptions]="{ standalone: true }" />
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="FileNameEndsWith" [(ngModel)]="job.source_config.fileendwith"
+                [ngModelOptions]="{ standalone: true }" />
+            </mat-form-field>
+            <mat-form-field flex>
+              <input matInput placeholder="FilePath" [(ngModel)]="job.source_config.filepath"
+                [ngModelOptions]="{ standalone: true }" />
+
+            </mat-form-field>
+          </div>
+          <div layout="row">
+            <mat-form-field>
+              <mat-select matInput placeholder="File Mask" [(ngModel)]="job.source_config.filemask"
+                [ngModelOptions]="{ standalone: true }">
+                <mat-option *ngFor="let type of dimRef.dimfilemask" [value]="type.filemask">
+                  {{ type.filemask }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select matInput placeholder="delimiter" [(ngModel)]="job.source_config.delimiter"
+                [ngModelOptions]="{ standalone: true }">
+                <mat-option *ngFor="let type of dimRef.dimdelimitertype" [value]="type.delimiter_type">
+                  {{ type.delimiter_type }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="encoding" [(ngModel)]="job.source_config.encoding"
+                [ngModelOptions]="{ standalone: true }" />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select matInput placeholder="lineterminator" [(ngModel)]="job.source_config.lineterminator"
+                [ngModelOptions]="{ standalone: true }">
+                <mat-option *ngFor="let type of dimRef.dimnewlinetype" [value]="type.line_type">
+                  {{ type.description }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div *ngIf="editFlag" layout="row">
+
+      <div layout="row" flex>
+        <div layout="column">
+          <connectionlist [shownew]="disabled" [filter]="'input'" [gridcomp]="disabled"
+            (connection)="selectedConnection($event)">
+          </connectionlist>
+        </div>
+        <div layout="column">
+          <div *ngIf="job.source_config.conn_type == 'AWS_S3' && connChangedFlag">
+            <div layout="row">
+              <mat-form-field>
+                <mat-select placeholder="delimiter" [(ngModel)]="job.source_config.delimiter"
+                  [ngModelOptions]="{ standalone: true }">
+                  <mat-option *ngFor="let type of dimRef.dimdelimitertype" [value]="type.delimiter_type">
+                    {{ type.delimiter_type }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-select placeholder="line terminator" [(ngModel)]="job.source_config.lineterminator"
+                  [ngModelOptions]="{ standalone: true }">
+                  <mat-option *ngFor="let type of dimRef.dimnewlinetype" [value]="type.line_type">
+                    {{ type.line_type }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <s3explorer [conn_id]="job.source_config.conn_id" [showdownload]="disabled" (file)="selectedS3File($event)">
+            </s3explorer>
+          </div>
+          <div *ngIf="job.source_config.conn_type == 'File' && connChangedFlag">
+            <td-message #message color="primary" label="Mandatory data" sublabel="Only plain text files are supported">
+              <button td-message-actions mat-icon-button (click)="message.close()">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </td-message>
+            <br /><br />
+            <div layout="row">
+              <mat-form-field>
+                <mat-select placeholder="delimiter" [(ngModel)]="job.source_config.delimiter"
+                  [ngModelOptions]="{ standalone: true }">
+                  <mat-option *ngFor="let type of dimRef.dimdelimitertype" [value]="type.delimiter_type">
+                    {{ type.delimiter_type }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-select placeholder="line terminator" [(ngModel)]="job.source_config.lineterminator"
+                  [ngModelOptions]="{ standalone: true }">
+                  <mat-option *ngFor="let type of dimRef.dimnewlinetype" [value]="type.line_type">
+                    {{ type.line_type }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <br />
+
+            <td-file-input class="push-left-sm push-right-sm" #fileInput [(ngModel)]="files" [disabled]="false"
+              [ngModelOptions]="{ standalone: true }">
+              <mat-icon color="primary">folder</mat-icon>
+              <span class="text-upper">Browse...</span>
+            </td-file-input>
+            <br />
+
+            <mat-form-field tdFileDrop [disabled]="false" (fileDrop)="files = $event"
+              (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
+              (keyup.delete)="fileInput.clear()" (keyup.backspace)="fileInput.clear()" flex>
+              <input matInput placeholder="select or drop files"
+                [value]="files?.length ? files?.length + ' files' : files?.name" [disabled]="false" readonly />
+            </mat-form-field>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button mat-icon-button *ngIf="files" (click)="fileInput.clear()" (keyup.enter)="fileInput.clear()">
+              <mat-icon>cancel</mat-icon>
+            </button>
+            <span>
+              <button mat-raised-button color="primary" [disabled]="!files" class="text-upper"
+                (click)="uploadLocalFile()">
+                Check
+              </button>
+            </span>
+          </div>
+          <div *ngIf="job.source_config.conn_type == 'Salesforce' && connChangedFlag">
+
+            <div *ngIf="sfdataloaded">
+              <salesforcequery [job]="sfjob"
+              [showdownload]="false"
+              (status)="SfQuery($event)">
+              </salesforcequery>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <br />
+    <td-expansion-panel [expand]="false">
+      <ng-template td-expansion-panel-label> </ng-template>
+      <ng-template td-expansion-panel-sublabel>
+        <span>Source Field Details</span>
+      </ng-template>
+
+      <div class="rightsection"
+      *ngFor="let item of job.sourcefields;
+          let i = index
+        ">
+          <div layout="row">
+            <mat-form-field>
+              <input matInput
+              placeholder="field"
+              [value]="item.field_name"
+              [readonly]="true" />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select matInput
+              placeholder="Field Type"
+              [(ngModel)]="item.field_type"
+              [ngModelOptions]="{ standalone: true }"
+              >
+                <mat-option *ngFor="let type of dimRef.dimfieldtype" [value]="type.field_type">
+                  {{ type.field_type }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+      </div>
+    </td-expansion-panel>
+
+    <br />
+
+    <div layout="row">
+      <span class="fill-remaining-space"></span>
+      <button  mat-raised-button color="accent" (click)="submit()">
+        Next
+      </button>
+
+    </div>
+  </div>
+
+
+</div>

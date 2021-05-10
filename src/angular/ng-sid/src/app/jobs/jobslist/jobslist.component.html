@@ -1,0 +1,82 @@
+
+    <div *tdLoading="'loadingsid'; mode:'indeterminate';
+    type:'linear'; strategy:'overlay'; color:'primary'">
+
+        <div *ngIf="dataloaded">
+          <div *ngIf="gridcomp">
+
+            <mat-grid-list cols="3" rowHeight="3:1" gutterSize="20px">
+              <mat-grid-tile *ngIf="shownew">
+                <mat-list>
+                  <mat-list-item style="cursor: pointer" (click)="newJob()">
+                    <mat-icon color="primary" matListIcon>add</mat-icon>
+                    <div mat-line>New Job</div>
+                  </mat-list-item>
+                </mat-list>
+
+
+              </mat-grid-tile>
+              <mat-grid-tile *ngFor="let job of dataRecords" style="cursor: pointer">
+                <div layout="column" style="cursor: pointer" (click)="editJob(job)">
+                  <div layout="row" class="text-color">
+                    <b>
+                      {{job.job_name}}
+                    </b>
+                  </div>
+                  <div *ngIf="job.run_type == 'R'" layout="row">
+                    <div layout="column">
+                      <img [src]="job.source_config.conn_logo_path" class="avatar" />
+                    </div>
+                    <div layout="column">
+                      <img src="/static/img/logo/arrow_right.png" class="arrow" />
+                    </div>
+                    <div layout="column">
+                      <img [src]="job.dest_config.conn_logo_path" class="avatar"/>
+                    </div>
+
+                  </div>
+                  <div layout="row" style="font-style: oblique; font-size: 12px">
+                    creation date: {{job.create_date}}
+                  </div>
+                </div>
+
+
+
+              </mat-grid-tile>
+            </mat-grid-list>
+          </div>
+          <div *ngIf="!gridcomp">
+
+              <mat-list [style.width.px]="600">
+                <mat-list-item>
+                  <td-search-box backIcon="arrow_back"
+                  placeholder="Filter Jobs"
+                  [showUnderline]="false"
+                  [alwaysVisible]="true"
+                  (searchDebounce)="filterJobs($event)"
+                  flex>
+                  </td-search-box>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <td-virtual-scroll-container #virtualScroll
+                [style.height.px]="400"
+                [data]="dataRecords">
+                  <ng-template let-row="row" let-last="last" tdVirtualScrollRow>
+                    <mat-list-item style="cursor: pointer" (click)="editJob(row)">
+                      <mat-icon color="primary" matListIcon>cloud_done</mat-icon>
+                      <div mat-line>{{row.job_name}}</div>
+                      <div mat-line>Type: {{row.run_type}}</div>
+                      <div mat-line>Creation Date: {{row.create_date}}</div>
+
+                    </mat-list-item>
+                    <mat-divider *ngIf="!last" [inset]="true"></mat-divider>
+                  </ng-template>
+                </td-virtual-scroll-container>
+              </mat-list>
+
+
+
+          </div>
+        </div>
+
+      </div>

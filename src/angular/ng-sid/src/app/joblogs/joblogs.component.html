@@ -1,0 +1,66 @@
+<div class="sidcontainer">
+
+    <div *tdLoading="'loadingsid'; mode:'indeterminate';
+  type:'linear'; strategy:'overlay'; color:'primary'">
+
+
+        <div *ngIf="dataloaded && jobRecords">
+
+
+            <mat-card *ngIf="!rowSelected">
+                <div layout="row">
+                    <mat-form-field color="primary" class="date-field">
+                        <input matInput [min]="minDate" [max]="selectEndDate.value" [formControl]="selectStartDate"
+                            [matDatepicker]="picker" placeholder="Start Date">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker disabled="false" color="primary">
+                        </mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field color="primary" class="date-field">
+                        <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker2" placeholder="End Date"
+                            [formControl]="selectEndDate">
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2 disabled="false" color="primary">
+                        </mat-datepicker>
+                    </mat-form-field>
+                    <div class="search-box">
+                        <button mat-mini-fab color="primary" (click)="onSubmit()">
+                            <mat-icon>done</mat-icon>
+                        </button>
+
+                    </div>
+                </div>
+                <mat-divider>
+
+                </mat-divider>
+
+                <div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
+                    <td-search-box #searchBox backIcon="arrow_back" class="push-right-sm" placeholder="Search Connector"
+                        (searchDebounce)="search($event)" [alwaysVisible]="true" flex>
+                    </td-search-box>
+                </div>
+                <mat-divider></mat-divider>
+
+                <td-data-table [sortable]="true" [clickable]="true" [selectable]="false"
+                    (rowClick)="selectRecord($event)" [data]="filteredData" [columns]="configWidthColumns"
+                    [style.height.px]="500" [sortBy]="sortBy">
+                    <!-- <ng-template tdDataTableTemplate="conn_logo_path" let-index="index" let-value="value">
+              <img [src]="value" [alt]="index" />
+            </ng-template> -->
+                </td-data-table>
+                <td-paging-bar #pagingBar [pageSize]="pageSize" [total]="filteredTotal" (change)="page($event)">
+                    <span hide-xs>Rows per page:</span>
+                    <mat-select [style.width.px]="50" [(ngModel)]="pageSize" name="pagesize">
+                        <mat-option *ngFor="let size of [50,100,200,500]" [value]="size">
+                            {{size}}
+                        </mat-option>
+                    </mat-select>
+                    {{pagingBar.range}}
+                    <span hide-xs>of {{pagingBar.total}}</span>
+                </td-paging-bar>
+
+            </mat-card>
+
+        </div>
+    </div>
+</div>

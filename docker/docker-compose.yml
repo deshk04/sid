@@ -1,0 +1,92 @@
+version: '3.7'
+
+services:
+  sid_database:
+    image: "postgres:13"
+    container_name: sid_postgres
+    environment:
+      - TZ=Australia/Melbourne
+    env_file: ./.env
+    volumes:
+      - ${REPO_PATH}/storage/pgdata:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    restart: on-failure:5
+
+  angular:
+    image: ang
+    build:
+      context: .
+      dockerfile: ./angular/Dockerfile
+    container_name: sid_ng_container
+    environment:
+      - TZ=Australia/Melbourne
+    env_file: ./.env
+    volumes:
+      - ${PROJ_ROOT}:/sid/
+    ports:
+      - "4200:4200"
+    restart: always
+
+  # sid_redis:
+  #   image: redis:latest
+  #   # build:
+  #   #   context: .
+  #   container_name: sid_redis_container
+  #   environment:
+  #     - TZ=Australia/Melbourne
+  #   env_file: ./.env
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #       - ./config/redis/redis.conf:/redis.conf
+  #   command: [ "redis-server", "/redis.conf" ]
+  #   restart: always
+
+
+  web:
+    image: django
+    build:
+      context: .
+      dockerfile: ./django/Dockerfile
+    container_name: sid_web_container
+    environment:
+      - TZ=Australia/Melbourne
+      - PG_HOST=${POSTGRES_HOST}
+      - PG_DATABASE=${POSTGRES_DATABASE}
+      - PG_USER=${POSTGRES_USER}
+      - PG_PASSWORD=${POSTGRES_PASSWORD}
+    env_file: ./.env
+    volumes:
+      - ${PROJ_ROOT}:/sid/
+    ports:
+      - "8080:8080"
+    links:
+      - sid_database
+    depends_on:
+      - angular
+      - sid_database
+      # - sid_redis
+    restart: always
+
+
+  nginx:
+    image: nginx
+    build:
+      context: ..
+      dockerfile: ./docker/nginx/Dockerfile
+      args:
+        - PROJ_ROOT=${PROJ_ROOT}
+    container_name: sid_nginx_container
+    env_file: ./.env
+    environment:
+      - PROJ_ROOT=$PROJ_ROOT
+      - TZ=Australia/Melbourne
+    volumes:
+      - ${PROJ_ROOT}:/sid/
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - web
+    restart: always

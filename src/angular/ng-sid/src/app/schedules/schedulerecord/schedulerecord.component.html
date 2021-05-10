@@ -1,0 +1,288 @@
+<div class="sidcontainer">
+  <div
+    *tdLoading="
+      'loadingsidsch';
+      mode: 'indeterminate';
+      type: 'linear';
+      strategy: 'overlay';
+      color: 'primary'
+    "
+  >
+    <div *ngIf="dataloaded">
+      <div layout="row">
+        <mat-card class="card-colored" flex>
+          <mat-card-header>
+          <button mat-button color="primary" style="color: white;" disabled>
+            {{ scheduleRecord.schedules.schedule_name }}
+          </button>
+          <span class="fill-remaining-space"></span>
+          <button mat-mini-fab color="accent"
+          title="Clone Schedule"
+          class="white-icon"
+          (click)="cloneSchedule()">
+            <mat-icon>content_copy</mat-icon>
+          </button>
+
+          <button mat-mini-fab color="accent"
+        title="Edit Schedule"
+        class="white-icon"
+        (click)="updateSchedule()">
+          <mat-icon>mode</mat-icon>
+        </button>
+        <button mat-mini-fab color="warn"
+        title="Delete Job"
+        class="white-icon"
+        (click)="deleteSchedule()"
+        disabled>
+          <mat-icon>delete_forever</mat-icon>
+        </button>
+
+      </mat-card-header>
+
+        </mat-card>
+      </div>
+      <br/><br/>
+
+        <div layout="row">
+            <mat-card flex>
+              <mat-card-header>
+                <mat-card-subtitle>
+                  <section>
+                    Schedule Re-run:
+                    <mat-checkbox
+                      class="checkbox-margin"
+                      [(ngModel)]="markasComplete"
+                      >Mark as Complete
+                    </mat-checkbox>
+                  </section>
+                </mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <br/>
+                <div layout="row">
+                  <mat-form-field color="primary" class="date-field">
+                    <input
+                      matInput
+                      [max]="currDate"
+                      [formControl]="schRunDate"
+                      [matDatepicker]="picker"
+                      placeholder="Schedule Run Date"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="picker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #picker disabled="false" color="primary">
+                    </mat-datepicker>
+                  </mat-form-field>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <button mat-mini-fab color="primary"
+                  title="Run Schedule"
+                  class="white-icon"
+                  (click)="runschedule()">
+                    <mat-icon>schedule_send</mat-icon>
+                  </button>
+
+
+
+                </div>
+              </mat-card-content>
+            </mat-card>
+        </div>
+        <br/>
+        <div layout="row">
+          <div *ngIf="logloaded && scheduleLogRecord && !rowSelected">
+            <mat-card flex>
+              <mat-card-header>
+                <mat-card-subtitle>
+                  <section>Run Logs: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</section>
+                </mat-card-subtitle>
+                <mat-form-field color="primary" class="date-field">
+                  <input
+                    matInput
+                    [min]="minDate"
+                    [max]="selectEndDate.value"
+                    [formControl]="selectStartDate"
+                    [matDatepicker]="picker"
+                    placeholder="Start Date"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="picker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #picker disabled="false" color="primary">
+                  </mat-datepicker>
+                </mat-form-field>
+                <mat-form-field color="primary" class="date-field">
+                  <input
+                    matInput
+                    [min]="minDate"
+                    [max]="maxDate"
+                    [matDatepicker]="picker2"
+                    placeholder="End Date"
+                    [formControl]="selectEndDate"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="picker2"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #picker2 disabled="false" color="primary">
+                  </mat-datepicker>
+                </mat-form-field>
+                <div class="search-box">
+                  <button
+                    mat-mini-fab
+                    color="primary"
+                    class="white-icon"
+                    (click)="getScheduleLog()"
+                  >
+                    <mat-icon>done</mat-icon>
+                  </button>
+                </div>
+              </mat-card-header>
+
+              <mat-divider> </mat-divider>
+
+              <!-- <div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
+                                  <td-search-box #searchBox backIcon="arrow_back" class="push-right-sm"
+                                      placeholder="Search Connector" (searchDebounce)="search($event)" [alwaysVisible]="true"
+                                      flex>
+                                  </td-search-box>
+                              </div>
+                              <mat-divider></mat-divider> -->
+              <div layout="row" flex>
+                <td-data-table
+                  [sortable]="true"
+                  [clickable]="true"
+                  [selectable]="false"
+                  (rowClick)="selectRecord($event)"
+                  [data]="filteredData"
+                  [columns]="configWidthColumns"
+                  [style.height.px]="400"
+                  [sortBy]="sortBy"
+                >
+                </td-data-table>
+              </div>
+              <div layout="row">
+                <td-paging-bar
+                  #pagingBar
+                  [pageSize]="pageSize"
+                  [total]="filteredTotal"
+                  (change)="page($event)"
+                >
+                  <span hide-xs>Rows per page:</span>
+                  <mat-select
+                    [style.width.px]="50"
+                    [(ngModel)]="pageSize"
+                    name="pagesize"
+                  >
+                    <mat-option
+                      *ngFor="let size of [50, 100, 200, 500]"
+                      [value]="size"
+                    >
+                      {{ size }}
+                    </mat-option>
+                  </mat-select>
+                  {{ pagingBar.range }}
+                  <span hide-xs>of {{ pagingBar.total }}</span>
+                </td-paging-bar>
+              </div>
+            </mat-card>
+          </div>
+
+        </div>
+        <div layout="row">
+
+          <div *ngIf="rowSelected" class="jobclass" style="overflow-x: auto">
+
+            <mat-card flex>
+              <mat-card-subtitle>
+                <button mat-mini-fab color="primary"
+                title="Back to Log table"
+                class="white-icon"
+                (click)="cancelLog()">
+                  <mat-icon>close</mat-icon>
+                </button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Run Date: {{this.selectedRec.run_date}}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Start: {{this.selectedRec.start_date}}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                End: {{ this.selectedRec.end_date }}
+
+              </mat-card-subtitle>
+              <mat-card-content>
+                Log Message: {{this.selectedRec.message}}
+                <br>
+              </mat-card-content>
+
+              <table>
+                <tr>
+                  <th>Job Name</th>
+                  <th>Status</th>
+                  <th>Total Count</th>
+                  <th>Success Count</th>
+                  <th>Failure Count</th>
+                  <th>Warning Count</th>
+                  <th>Log</th>
+                </tr>
+
+                <tr *ngFor="let job of selectedRec.jobrun">
+                  <td>
+                    <button mat-raised-button
+                    color="primary"
+                    (click)="redirectJob(job.job_id)"
+                    >
+                      {{ job.job_name }}
+                    </button>
+                  </td>
+                  <td>{{ job.status }}</td>
+                  <td>{{ job.total_count }}</td>
+                  <td>{{ job.success_count }}</td>
+                  <td>{{ job.failure_count }}</td>
+                  <td>{{ job.warning_count }}</td>
+                  <td>
+                    <button
+                      mat-mini-fab
+                      color="primary"
+                      (click)="redirectLog(job.jobrun_id)"
+                      aria-label="Download log"
+                    >
+                      <mat-icon class="white-icon">text_snippet</mat-icon>
+                    </button>
+                  </td>
+                </tr>
+              </table>
+            </mat-card>
+
+          </div>
+        </div>
+
+
+        <div layout="row">
+          <!-- <table style="width: 80%">
+            <tr>
+              <th>Step</th>
+              <th>Job Name</th>
+            </tr>
+
+            <tr *ngFor="let record of groupedRecords | keyvalue">
+              <td>{{ record.key }}</td>
+              <td>
+                <div *ngFor="let sch of record.value">
+                  {{ sch.job_name }} &nbsp;&nbsp;
+                </div>
+              </td>
+            </tr>
+          </table> -->
+
+          <!-- <editschedule [schedule]="scheduleRecord">
+
+          </editschedule> -->
+
+        </div>
+
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,208 @@
+<div class="sidcontainer">
+    <div
+      *tdLoading="
+        'loadingsidjob';
+        mode: 'indeterminate';
+        type: 'linear';
+        strategy: 'overlay';
+        color: 'primary'
+      "
+    >
+      <div *ngIf="dataloaded">
+        <div layout="row">
+            <mat-card class="card-colored" flex>
+                <mat-card-header>
+                    <button mat-button color="primary" style="color: white;" disabled>
+                        {{ selectedJobRecord.job_name }}
+                      </button>
+                      <span class="fill-remaining-space"></span>
+                      <button mat-mini-fab color="accent"
+                      title="Edit Job"
+                      class="white-icon"
+                      (click)="editJob()"
+                      >
+                        <mat-icon>mode</mat-icon>
+                      </button>
+
+                      <button mat-mini-fab color="accent"
+                      title="Clone Job"
+                      class="white-icon"
+                      (click)="cloneJob()">
+                        <mat-icon>content_copy</mat-icon>
+                      </button>
+                      <button mat-mini-fab color="warn"
+                      title="Delete Job"
+                      class="white-icon"
+                      (click)="deleteJob()"
+                      disabled>
+                        <mat-icon>delete_forever</mat-icon>
+                      </button>
+
+                </mat-card-header>
+            </mat-card>
+
+        </div>
+        <br>
+        <div>
+          <div *ngIf="selectedJobRecord.run_type === 'R'" layout="row">
+            <div layout="column">
+              <mat-list>
+                <mat-list-item>
+                  <img
+                    matListAvatar
+                    [src]="selectedJobRecord.source_config.conn_logo_path"
+                  />
+                  <div mat-line>{{ selectedJobRecord.source_config.conn_name }}</div>
+                  <div mat-line>
+                    System Type:
+                    {{ selectedJobRecord.source_config.conn_system_type }}
+                  </div>
+                </mat-list-item>
+              </mat-list>
+            </div>
+            <div layout="column">
+              <img src="/static/img/logo/arrow_right.png" class="arrow" />
+            </div>
+
+            <div layout="column">
+              <mat-list>
+                <mat-list-item>
+                  <img
+                    matListAvatar
+                    [src]="selectedJobRecord.dest_config.conn_logo_path"
+                  />
+                  <div mat-line>{{ selectedJobRecord.dest_config.conn_name }}</div>
+                  <div mat-line>
+                    System Type:
+                    {{ selectedJobRecord.dest_config.conn_system_type }}
+                  </div>
+                </mat-list-item>
+              </mat-list>
+
+            </div>
+          </div>
+
+
+          </div>
+        <br>
+        <div>
+            <mat-card>
+              <div *ngIf="selectedJobRecord.run_type === 'R'">
+                <mat-card-header>
+
+                    Job Re-run:
+                      <span class="fill-remaining-space"></span>
+
+                      <mat-slide-toggle
+
+                      class="oneoffrun"
+                      color="primary"
+                      [(ngModel)]="oneoffFlag"
+                      [checked]="oneoffFlag"
+                      >One off Job Run (from local file)
+                    </mat-slide-toggle>
+
+                </mat-card-header>
+
+              </div>
+                <mat-card-content>
+                  <mat-divider></mat-divider>
+
+                  <div *ngIf="oneoffFlag">
+                  <mat-card>
+                    <mat-card-content>
+                        <!-- <sourceselector (job)="sourceDetails($event)">
+                        </sourceselector> -->
+                        <td-message #message color="primary" label="Mandatory data"
+                        sublabel="Only plain text files are supported">
+                        <button td-message-actions mat-icon-button (click)="message.close()">
+                          <mat-icon>cancel</mat-icon>
+                        </button>
+                      </td-message>
+                      <br><br>
+                      <div layout="row">
+
+                        <mat-form-field>
+                          <mat-select placeholder="delimiter" [(value)]="delimiter">
+                            <mat-option *ngFor="let type of dimRef.dimdelimitertype" [value]="type.delimiter_type">
+                              {{ type.delimiter_type }}
+                            </mat-option>
+                          </mat-select>
+
+                        </mat-form-field>
+                        <mat-form-field>
+                          <mat-select placeholder="line terminator" [(value)]="newline">
+                            <mat-option *ngFor="let type of dimRef.dimnewlinetype" [value]="type.line_type">
+                              {{ type.line_type }}
+                            </mat-option>
+                          </mat-select>
+
+                        </mat-form-field>
+
+                      </div>
+                      <br>
+
+                      <td-file-input class="push-left-sm push-right-sm" #fileInput
+                        [(ngModel)]="files" [disabled]="false"
+                        [ngModelOptions]="{standalone: true}">
+                        <mat-icon color="primary">folder</mat-icon>
+                        <span class="text-upper">Browse...</span>
+                      </td-file-input>
+                      <br>
+
+                      <mat-form-field tdFileDrop [disabled]="false"
+                        (fileDrop)="files = $event"
+                        (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
+                        (keyup.delete)="fileInput.clear()" (keyup.backspace)="fileInput.clear()" flex>
+                        <input matInput placeholder="select or drop files"
+                          [value]="files?.length ? (files?.length + ' files') : files?.name" [disabled]="false" readonly />
+                      </mat-form-field>
+                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <button mat-icon-button *ngIf="files" (click)="fileInput.clear()" (keyup.enter)="fileInput.clear()">
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                      <span>
+                        <button mat-raised-button color="primary" [disabled]="!files" class="text-upper"
+                          (click)="jobWithLocalFile()">Run</button>
+                      </span>
+
+
+                      </mat-card-content>
+                  </mat-card>
+                </div>
+
+                  <br>
+                  <div *ngIf="!oneoffFlag">
+                    <mat-form-field color="primary" class="date-field">
+                      <input
+                        matInput
+                        [max]="currDate"
+                        [formControl]="jobRunDate"
+                        [matDatepicker]="picker"
+                        placeholder="Job Run Date"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="picker"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #picker disabled="false" color="primary">
+                      </mat-datepicker>
+                    </mat-form-field>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button mat-mini-fab color="primary"
+                    title="Run Job"
+                    class="white-icon"
+                    (click)="runJobByDate()">
+                      <mat-icon>schedule_send</mat-icon>
+                    </button>
+
+
+                  </div>
+                </mat-card-content>
+              </mat-card>
+
+        </div>
+
+      </div>
+    </div>
+  </div>

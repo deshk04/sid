@@ -1,0 +1,66 @@
+@import 'src/sid_theme';
+
+$primary: map-get($theme-primary, primary);
+button {  background-color: mat-color($mat-primary);
+}
+
+mat-sidenav {
+  background-color: mat-color($mat-primary);
+  // color: white;
+}
+
+.img-circle {
+   background-repeat: no-repeat;
+   background-size: cover;
+   background-position: center center;
+  border-radius: 50%;
+  background-size: 100% 100%;
+}
+
+.layout-container {
+  // position: relative;
+  // right: 15px;
+  // left: 20px;
+  // top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
+  // z-index: 100;
+  // display: flex;
+  margin-top: 20px;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+.fab-container {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+
+  > div {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    margin-bottom: 5px;
+
+    button {
+      margin-bottom: 17px;
+    }
+  }
+}
+
+.is-active {
+  background-color: #b3e8e8;
+  border: 1px solid #b3e8e8;
+  // border-radius: 5em;
+  border-top-right-radius: 5em;
+  border-bottom-right-radius: 5em;
+}
+
+.font-colour {
+  color: white;
+}

@@ -1,0 +1,34 @@
+
+    <div *tdLoading="'loadingsidsched'; mode:'indeterminate';
+  type:'linear'; strategy:'overlay'; color:'primary'">
+
+      <div *ngIf="dataloaded">
+        <div *ngIf="!rowSelected">
+          <mat-grid-list cols="3" rowHeight="3:1" gutterSize="20px">
+            <mat-grid-tile>
+              <mat-list>
+                <mat-list-item style="cursor: pointer" (click)="newSchedule()">
+                  <mat-icon color="primary" matListIcon>add</mat-icon>
+                  <div mat-line>New Schedule</div>
+                </mat-list-item>
+              </mat-list>
+
+            </mat-grid-tile>
+            <mat-grid-tile *ngFor="let schd of datarecords" style="cursor: pointer">
+              <mat-list>
+                <mat-list-item (click)="editSchedule(schd)">
+                    <mat-icon color="primary" matListIcon>share</mat-icon>
+                  <div mat-line>{{schd.schedule_name}}</div>
+                  <div mat-line>Frequency: {{schd.frequency}}</div>
+                  <div mat-line>Creation Date: {{schd.create_date}}</div>
+
+                </mat-list-item>
+              </mat-list>
+            </mat-grid-tile>
+          </mat-grid-list>
+
+        </div>
+
+      </div>
+
+    </div>

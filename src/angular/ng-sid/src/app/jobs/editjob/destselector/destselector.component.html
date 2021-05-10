@@ -1,0 +1,300 @@
+<div *tdLoading="'loadingdestsid'; mode:'indeterminate';
+type:'linear'; strategy:'overlay'; color:'primary'">
+
+<div *ngIf="dataloaded">
+  <div layout="row">
+    <button mat-button color="primary" (click)="toggleEditFlag()">
+      <mat-icon color="primary"> mode</mat-icon>
+      Change Destination Connector
+    </button>
+  </div>
+
+  <div *ngIf="!editFlag" layout="row">
+    <div layout="column">
+      <mat-list>
+        <mat-list-item>
+          <img matListAvatar [src]="job.dest_config.conn_logo_path" />
+          <div mat-line>
+            {{ job.dest_config.conn_name }}
+          </div>
+          <div mat-line>
+            System Type:
+            {{ job.dest_config.conn_system_type }}
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </div>
+    <div layout="column" class="rightsection">
+      <div *ngIf="job.dest_config.conn_type == 'Salesforce'">
+        <div layout="row">
+        <mat-form-field>
+          <input matInput placeholder="Destination Model"
+          [(ngModel)]="job.dest_config.model"
+            [ngModelOptions]="{ standalone: true }" disabled/>
+        </mat-form-field>
+      </div>
+      <div layout="row">
+        <mat-form-field>
+            <mat-select
+            matInput
+            placeholder="Type"
+            [(ngModel)]="job.dest_config.transaction_type"
+            [ngModelOptions]="{ standalone: true }"
+            >
+
+            <mat-option
+              *ngFor="let type of dimRef.dimtransactiontype"
+              [value]="type.transaction_type"
+            >
+              {{ type.transaction_type }}
+            </mat-option>
+          </mat-select>
+
+          </mat-form-field>
+          <mat-form-field *ngIf="job.dest_config.transaction_type == 'upsert'">
+          <mat-select
+            matInput
+            placeholder="Upsert Field"
+            [(ngModel)]="job.dest_config.key_field"
+            [ngModelOptions]="{ standalone: true }"
+            >
+            <mat-option
+              *ngFor="let type of destModelFields"
+              [value]="type.field_name"
+            >
+              {{ type.field_name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-select
+            matInput
+            placeholder="Bulk Count"
+            [(ngModel)]="job.dest_config.bulk_count"
+            [ngModelOptions]="{ standalone: true }"
+          >
+
+            <mat-option
+              *ngFor="let count of bulkCount"
+              [value]="count"
+            >
+              {{ count }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+
+      </div>
+      <div *ngIf="job.dest_config.conn_type != 'Salesforce'">
+        <div layout="row">
+          <mat-form-field>
+            <input matInput placeholder="FileNameStartsWith" [(ngModel)]="job.dest_config.filestartwith"
+              [ngModelOptions]="{ standalone: true }" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="FileNameEndsWith" [(ngModel)]="job.dest_config.fileendwith"
+              [ngModelOptions]="{ standalone: true }" />
+          </mat-form-field>
+          <mat-form-field flex>
+            <input matInput placeholder="FilePath" [(ngModel)]="job.dest_config.filepath"
+              [ngModelOptions]="{ standalone: true }" />
+
+          </mat-form-field>
+        </div>
+        <div layout="row">
+          <mat-form-field>
+            <mat-select matInput placeholder="File Mask" [(ngModel)]="job.dest_config.filemask"
+              [ngModelOptions]="{ standalone: true }">
+              <mat-option *ngFor="let type of dimRef.dimfilemask" [value]="type.filemask">
+                {{ type.filemask }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select matInput placeholder="delimiter" [(ngModel)]="job.dest_config.delimiter"
+              [ngModelOptions]="{ standalone: true }">
+              <mat-option *ngFor="let type of dimRef.dimdelimitertype" [value]="type.delimiter_type">
+                {{ type.delimiter_type }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="encoding" [(ngModel)]="job.dest_config.encoding"
+              [ngModelOptions]="{ standalone: true }" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select matInput placeholder="lineterminator" [(ngModel)]="job.dest_config.lineterminator"
+              [ngModelOptions]="{ standalone: true }">
+              <mat-option *ngFor="let type of dimRef.dimnewlinetype" [value]="type.line_type">
+                {{ type.description }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div *ngIf="editFlag" layout="row">
+    <div layout="column">
+      <connectionlist [shownew]="disabled" [filter]="'output'" [gridcomp]="disabled"
+        (connection)="selectedConnection($event)">
+      </connectionlist>
+    </div>
+    <div layout="column">
+      <div *ngIf="job.dest_config.conn_type == 'Salesforce'">
+        <div *ngIf="sfdataloaded" layout="row">
+
+          <mat-form-field>
+            <mat-select matInput placeholder="Model"
+            [(value)]="job.dest_config.model" (selectionChange)="modelChange($event)">
+              <mat-option *ngFor="let model of destModels" [value]="model.name">
+                {{ model.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div *ngIf="modelSelectedFlag">
+
+            <mat-form-field>
+              <mat-select matInput placeholder="Bulk Count" [(value)]="job.dest_config.bulk_count">
+                <mat-option *ngFor="let count of bulkCount" [value]="count">
+                  {{ count }}
+                </mat-option>
+              </mat-select>
+
+
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-select matInput placeholder="Type" [(value)]="job.dest_config.transaction_type" (selectionChange)="modelChange($event)">
+                <mat-option *ngFor="let type of dimRef.dimtransactiontype" [value]="type.transaction_type">
+                  {{ type.transaction_type }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="job.dest_config.transaction_type == 'upsert'">
+              <mat-select matInput placeholder="Key" [(value)]="job.dest_config.key_field">
+                <mat-option *ngFor="let field of destModelFields" [value]="field.field_name">
+                  {{ field.field_name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+
+          </div>
+          <div layout="row">
+            <span>
+              <button mat-raised-button color="primary" [disabled]="!modelSelectedFlag" class="text-upper"
+                (click)="accept('Salesforce')">Accept</button>
+            </span>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+
+      <div *ngIf="job.dest_config.conn_type == 'File' || job.dest_config.conn_type == 'AWS_S3'">
+
+
+        <div layout="row">
+          <mat-form-field flex>
+            <input matInput placeholder="FileNameStartsWith"
+            [(ngModel)]="job.dest_config.filestartwith"
+            [ngModelOptions]="{ standalone: true }"
+            />
+          </mat-form-field>
+          <mat-form-field flex>
+            <mat-select matInput placeholder="File Type"
+            [(value)]="job.dest_config.fileendwith">
+
+              <mat-option *ngFor="let type of fileExt" [value]="type">
+                {{ type }}
+              </mat-option>
+            </mat-select>
+
+          </mat-form-field>
+        </div>
+        <div *ngIf="job.dest_config.conn_type == 'AWS_S3'">
+          <div layout="row">
+            <mat-form-field flex>
+              <input matInput placeholder="FilePath"
+              [(ngModel)]="job.dest_config.filepath"
+              [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+
+          </div>
+
+        </div>
+        <div layout="row">
+          <mat-icon matSuffix matTooltip="If filemask is set then rundate is used to generate filename">
+            help_outline
+          </mat-icon>
+
+          <mat-form-field>
+
+            <mat-select matInput placeholder="File Mask"
+            [(value)]="job.dest_config.filemask">
+
+              <mat-option *ngFor="let type of dimRef.dimfilemask" [value]="type.filemask">
+                {{ type.filemask }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select matInput placeholder="delimiter"
+            [(value)]="job.dest_config.delimiter">
+              <mat-option *ngFor="let type of dimRef.dimdelimitertype" [value]="type.delimiter_type">
+                {{ type.delimiter_type }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select matInput placeholder="lineterminator"
+            [(value)]="job.dest_config.lineterminator">
+              <mat-option *ngFor="let type of dimRef.dimnewlinetype" [value]="type.line_type">
+                {{ type.description }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+        <div layout="row">
+          <span>
+            <button mat-raised-button color="primary"
+            class="text-upper" (click)="accept('AWS_S3')">Accept</button>
+          </span>
+
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+
+  <div layout="row">
+
+    <div *ngIf="showprevious">
+    <button  mat-raised-button color="accent" (click)="cancel()">
+      Previous
+    </button>
+  </div>
+
+    <span class="fill-remaining-space"></span>
+    <button  mat-raised-button color="accent" (click)="submit()">
+      Next
+    </button>
+
+  </div>
+</div>
+
+</div>

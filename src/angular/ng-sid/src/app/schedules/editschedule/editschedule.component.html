@@ -1,0 +1,172 @@
+<div *tdLoading="'loadingeditschsid'; mode:'indeterminate';
+type:'linear'; strategy:'overlay'; color:'primary'">
+
+    <div *ngIf="schdataloaded && jobsdataloaded">
+
+        <div layout="row">
+            <mat-card class="card-colored" flex>
+                <mat-card-header>
+                    <button mat-button color="primary" style="color: white"
+                    (click)="returnSchedule()">
+                        {{ schedule.schedules.schedule_name }}
+                    </button>
+                    <span class="fill-remaining-space"></span>
+                    <button mat-mini-fab color="accent" title="Reset Job" (click)="resetSchedule()">
+                        <mat-icon style="color: white" color="warn">
+                            change_circle</mat-icon>
+                    </button>
+
+                </mat-card-header>
+            </mat-card>
+        </div>
+        <br>
+
+        <div layout="row">
+            <mat-card flex>
+                <mat-card-header>
+                    <span class="fill-remaining-space"></span>
+                    <button mat-raised-button color="accent" class="white-icon" (click)="addStep()">
+                        <mat-icon>add</mat-icon> New Step
+                    </button>
+                </mat-card-header>
+                <div layout="row">
+                    <mat-form-field>
+                        <input matInput placeholder="Job Name" [(ngModel)]="schedule.schedules.schedule_name"
+                            [ngModelOptions]="{ standalone: true }" />
+                    </mat-form-field>
+                    <mat-form-field flex>
+                        <input matInput placeholder="Email Distribution List" [(ngModel)]="schedule.distribution.tolist"
+                            [ngModelOptions]="{ standalone: true }" />
+                    </mat-form-field>
+
+                </div>
+
+            </mat-card>
+
+
+
+
+        </div>
+
+        <div *ngFor="let rec of currjobSchedule | keyvalue">
+            <mat-card class="classcomponent" flex>
+                <mat-card-header>
+                    Step: &nbsp; {{rec.key}}
+                    <span class="fill-remaining-space"></span>
+
+                    <button mat-mini-fab title="Delete Step" class="white-icon" (click)="deleteStep(rec.key)">
+                        <mat-icon>delete_forever</mat-icon>
+
+                    </button>
+
+                </mat-card-header>
+
+                <td-chips color="primary" [items]="jobRecords"
+                [(ngModel)]="rec.value" placeholder="Add New job"
+                    (add)="handleAdd($event, rec.key)"
+                    (remove)="handleRemove($event, rec.key)"
+                    requireMatch
+                    >
+
+                    <ng-template td-chip let-chip="chip">
+                        <mat-icon color="primary">cloud_done</mat-icon>
+                        <span class="text-truncate">&nbsp;&nbsp;{{ chip.job_name }}</span>
+                    </ng-template>
+                    <ng-template td-autocomplete-option let-option="option">
+                        <div layout="row" layout-align="start center">
+                            <mat-icon color="primary">cloud_done</mat-icon>
+                            {{ option.job_name }}
+                        </div>
+                    </ng-template>
+
+                </td-chips>
+
+            </mat-card>
+
+        </div>
+
+        <div layout="row">
+            <mat-card class="classcomponent" flex>
+                <mat-card-header>
+                    Schedule Frequency &nbsp;&nbsp;
+                    <mat-radio-group aria-label="Schedule Frequency" [(ngModel)]="schedule.schedules.frequency">
+                        <mat-radio-button value="Daily" checked>Daily</mat-radio-button>
+                        <mat-radio-button value="Monthly">Monthly</mat-radio-button>
+                    </mat-radio-group>
+                    <span class="fill-remaining-space"></span>
+                    <mat-form-field>
+                        <mat-select [(ngModel)]="schedule.schedules.hours" placeholder="Hour">
+                            <mat-option *ngFor="let hr of dimhour" [value]="hr">
+                                {{ hr }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-select [(ngModel)]="schedule.schedules.minutes" placeholder="Hour">
+                            <mat-option *ngFor="let hr of dimmin" [value]="hr">
+                                {{ hr }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                </mat-card-header>
+                <div *ngIf="schedule.schedules.frequency === 'Daily'">
+
+                    <div layout="row">
+                        <mat-checkbox class="checkbox-margin" [(ngModel)]="dailydays['monday']">Monday
+                        </mat-checkbox>
+                        <mat-checkbox class="checkbox-margin" [(ngModel)]="dailydays['tuesday']">Tuesday
+                        </mat-checkbox>
+                        <mat-checkbox class="checkbox-margin" [(ngModel)]="dailydays['wednesday']">Wednesday
+                        </mat-checkbox>
+                        <mat-checkbox class="checkbox-margin" [(ngModel)]="dailydays['thursday']">Thursday
+                        </mat-checkbox>
+
+                    </div>
+                    <div layout="row">
+                        <mat-checkbox class="checkbox-margin" [(ngModel)]="dailydays['friday']">Friday &nbsp;&nbsp;
+                        </mat-checkbox>
+                        <mat-checkbox class="checkbox-margin" [(ngModel)]="dailydays['saturday']">Saturday
+                        </mat-checkbox>
+                        <mat-checkbox class="checkbox-margin" [(ngModel)]="dailydays['sunday']">Sunday
+                        </mat-checkbox>
+                        <br>
+
+                    </div>
+                </div>
+                <div *ngIf="schedule.schedules.frequency !== 'Daily'">
+                    <div layout="row">
+                        Run on: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>Day of Month</mat-label>
+                            <mat-select [(ngModel)]="schedule.schedules.day_of_month" name="Day of Month">
+                                <mat-option *ngFor="let item of dayofmonth" [value]="item.day">
+                                    {{item.value}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                    </div>
+
+
+                </div>
+
+                <div layout="row">
+                    <span class="fill-remaining-space"></span>
+                    <button mat-raised-button color="warn" (click)="submit()">update</button>
+                </div>
+
+            </mat-card>
+        </div>
+
+        <br /><br />
+
+    </div>
+    <!-- <div *ngIf="!jobsdataloaded">
+        <td-message label="Error!" sublabel="No Job Records found" color="warn" icon="error">
+        </td-message>
+
+    </div> -->
+
+</div>

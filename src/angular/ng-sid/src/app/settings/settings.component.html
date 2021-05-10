@@ -1,0 +1,62 @@
+<div class="sidcontainer">
+  <div *tdLoading="
+      'loadingsidjob';
+      mode: 'indeterminate';
+      type: 'linear';
+      strategy: 'overlay';
+      color: 'primary'
+    ">
+    <mat-card class="sid-card basic-container">
+      <form [formGroup]="passwdForm" (ngSubmit)="onPasswordChange()">
+
+        <mat-card-title color="primary" layout="row" layout-align="start center"><span class="md-title">Change
+            Password</span>
+        </mat-card-title>
+        <mat-divider></mat-divider>
+        <mat-card-content class="push-bottom-none">
+
+          <div layout="row" cellspacing="1">
+            <mat-form-field flex>
+
+              <input matInput required type="password" formControlName="curr_passwd" placeholder="Current Password" />
+            </mat-form-field>
+          </div>
+
+          <div>
+            <ul>
+              <li>Your password must contain at least 8 characters.</li>
+              <li>Your password must contain a mixture of numbers and letters.</li>
+            </ul>
+          </div>
+
+          <div layout="row">
+            <mat-form-field flex>
+
+              <input matInput required type="password" formControlName="new_passwd1" placeholder="New Password" />
+            </mat-form-field>
+          </div>
+
+
+          <div layout="row">
+            <mat-form-field flex>
+
+              <input matInput required type="password" formControlName="new_passwd2" placeholder="Confirm Password" />
+            </mat-form-field>
+          </div>
+
+        </mat-card-content>
+        <mat-divider></mat-divider>
+        <mat-card-actions>
+          <div layout="row" class="pad-sm">
+            <button mat-raised-button flex color="primary" class="text-upper">Submit
+            </button>
+          </div>
+        </mat-card-actions>
+      </form>
+
+
+    </mat-card>
+
+
+  </div>
+</div>
