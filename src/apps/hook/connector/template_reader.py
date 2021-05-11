@@ -36,7 +36,7 @@ class Reader():
             open connection
             in template we populate dummy data
         """
-        self.reader = [{'run_data': self.run_date.strftime('%Y-%m-%d')}]
+        self.reader = [{'run_date__c': self.run_date.strftime('%Y-%m-%d')}]
 
     @property
     def header(self):

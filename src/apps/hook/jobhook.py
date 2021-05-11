@@ -3,7 +3,6 @@
 """
 from core.general.exceptions import SIDException
 
-
 class JobHook():
     """
         Job Hook
@@ -24,7 +23,7 @@ class JobHook():
         """
             below is sample code to return a connector
         """
-        if job.job_id == -999:
+        if job.job_id == 71:
             """
                 from apps.hook.connector.jobreader import Reader
                 return Reader(
@@ -35,8 +34,8 @@ class JobHook():
             """
             from apps.hook.connector.template_reader import Reader
             reader = Reader(
-                user_id=self.user_id,
-                run_date=self.run_date
+                user_id=user_id,
+                run_date=run_date
             )
             return reader
 

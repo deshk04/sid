@@ -10,7 +10,7 @@ from django.db.models import Q
 
 from core.general import settings
 from core.general.exceptions import SIDException
-
+import pdb
 
 class JobController():
     """
@@ -176,7 +176,10 @@ class JobController():
         """
                 Before we execute let's get config details
         """
-        source_config, dest_config = self.get_jobconfig(job.job_id)
+        adhocFlag = False
+        if job.run_type == 'A':
+            adhocFlag = True
+        source_config, dest_config = self.get_jobconfig(job.job_id, adhocFlag)
         return self.run_jobbyconfig(job, source_config, dest_config)
 
     def run_jobbyconfig(self,
@@ -221,10 +224,12 @@ class JobController():
                 """
                 job_run.filename = reader.input_object
                 """
-                    set the mapper
+                    set the mapper for regular job
                 """
-                mapper = self.get_mapper(dest_config)
-                mapper.setup()
+                mapper = None
+                if job.run_type != 'A':
+                    mapper = self.get_mapper(dest_config)
+                    mapper.setup()
                 """
                     fetch the write connector
                 """
@@ -238,7 +243,9 @@ class JobController():
                     """
                     logging.debug('Processing Record: %s',
                                   str(job_run.total_count))
-                    mapped_record, map_warning = mapper.map(record)
+                    mapped_record = record
+                    if mapper:
+                        mapped_record, map_warning = mapper.map(record)
                     """
                         we are ignoring the map_warning for the time
                     """
@@ -249,7 +256,8 @@ class JobController():
                     cleanup
                 """
                 writer.down()
-                mapper.down()
+                if mapper:
+                    mapper.down()
                 reader.down()
 
                 if writer.output_object and job_run.total_count > 0:
@@ -286,7 +294,7 @@ class JobController():
                 if it's adhoc then we get the reader
                 from JobHook
             """
-            from apps.hook.maphook import JobHook
+            from apps.hook.jobhook import JobHook
             job_hook = JobHook()
             try:
                 connector = job_hook.reader(self.user_id, self.run_date, job)
@@ -375,7 +383,7 @@ class JobController():
             """
                 we only expect destination connector
             """
-            if len(job_configs) != 1 or job_configs[0] != 'D':
+            if len(job_configs) != 1 or job_configs[0].rec_type != 'D':
                 raise SIDException('Invalid Adhoc Job Configuration', 'Dest')
 
             return (None, job_configs[0])
