@@ -84,7 +84,7 @@ class TestGeneral(unittest.TestCase):
 
     def test_checkdateformat(self):
         """
-            Test valid download path
+            Test valid date
         """
         from core.general.sidhelper import check_dateformat
         from datetime import date
