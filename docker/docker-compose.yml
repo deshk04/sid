@@ -10,7 +10,7 @@ services:
     volumes:
       # - ${REPO_PATH}/storage/pgdata:/var/lib/postgresql/data/
       - ./postgres/sid_init.sql:/docker-entrypoint-initdb.d/init.sql
-      ports:
+    ports:
       - "5432:5432"
     restart: on-failure:5
 
