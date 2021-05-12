@@ -127,7 +127,6 @@ dmypy.json
 .pyre/
 
 #sid files
-pgdata/
 *.log
 uwsgi.sock
 *.xls
