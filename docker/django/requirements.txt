@@ -29,3 +29,4 @@ python-crontab==2.5.1
 redis==3.5.3
 python-dotenv==0.15.0
 django-cors-headers==3.7.0
+moto[s3]==2.0.6
