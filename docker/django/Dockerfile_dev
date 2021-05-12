@@ -25,8 +25,20 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     wget \
     dos2unix \
     less
+#     python3-pip
+
+#RUN apt-get install -y postgresql-12
 
 RUN apt-get clean all
+
+# RUN apt-get install -y nodejs npm
+# ENV PATH /usr/local/bin/:$PATH
+# RUN npm install -g @angular/cli@9
+
+# RUN ln -s /usr/bin/python3 /usr/bin/python
+# RUN ln -s /usr/bin/pip3 /usr/bin/pip
+
+# docker build -t baseimage:latest .
 
 #######################################
 #  django build
@@ -62,7 +74,7 @@ RUN apt-get update && apt-get install -y \
     python3-pip
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
-# RUN ln -s /usr/bin/pip3 /usr/bin/pip
+#RUN ln -s /usr/bin/pip3 /usr/bin/pip
 
 # RUN adduser --disabled-password --gecos '' sid
 # RUN usermod -aG sudo sid
@@ -107,4 +119,4 @@ COPY ./django/entrypoint.sh /entrypoint.sh
 #RUN dos2unix /sid/docker/django/entrypoint.sh
 
 # CMD ["uwsgi", "--emperor", "/sid/config/uwsgi/sid.uwsgi.ini"]
-CMD ["sh", "/entrypoint.sh"]
+CMD ["sh", "/entrypoint_dev.sh"]

@@ -7,6 +7,9 @@ LABEL maintainer="desh"
 # ENV http_proxy http://proxy.local:8080
 # ENV https_proxy http://proxy.local:8080
 
+VOLUME  ["/sid/"]
+WORKDIR /sid/src/angular/ng-sid/
+
 # install and cache app dependencies
 # COPY package.json /app/package.json
 RUN npm install
@@ -20,8 +23,6 @@ ARG PROJ_ROOT
 ENV PROJ_ROOT=$PROJ_ROOT
 ENV PATH /ng-sid/node_modules/.bin:$PATH
 
-VOLUME  ["/sid/"]
-WORKDIR /sid/src/angular/ng-sid/
 
 # RUN ng new ng-sid
 # start app
@@ -36,7 +37,9 @@ WORKDIR /sid/src/angular/ng-sid/
 EXPOSE 4200
 
 #CMD ng serve --host 0.0.0.0
+COPY ./angular/entrypoint.sh /entrypoint.sh
 
 #CMD ["npm", "start"]
 # CMD ng build --watch
-CMD ng serve --port 4200 --host 0.0.0.0 --proxy-config proxy.conf.json
+# CMD ng serve --port 4200 --host 0.0.0.0 --proxy-config proxy.conf.json
+CMD ["sh", "/entrypoint.sh"]
