@@ -104,7 +104,6 @@ COPY ./django/bashrc.text /etc/environment
 RUN chmod +x /etc/environment
 RUN dos2unix /etc/environment
 COPY ./django/entrypoint.sh /entrypoint.sh
-#RUN dos2unix /sid/docker/django/entrypoint.sh
+RUN dos2unix /entrypoint.sh
 
-# CMD ["uwsgi", "--emperor", "/sid/config/uwsgi/sid.uwsgi.ini"]
 CMD ["sh", "/entrypoint.sh"]

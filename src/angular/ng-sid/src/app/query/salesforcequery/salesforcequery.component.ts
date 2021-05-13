@@ -78,6 +78,12 @@ export class SalesforcequeryComponent implements OnChanges {
     if(this.showdownload){
       this.job.filter = 'n';
     }
+    if(this.job.query === null) {
+      this.job.query = {
+        query: '',
+        metadata: ''
+      }
+    }
 
     this.dataloaded = false;
     this.querydataFlag= false;

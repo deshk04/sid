@@ -211,8 +211,8 @@ CREATE TABLE job_config
     key_field text,
     bulk_count integer DEFAULT 100 NOT NULL,
     query text,
-    transaction_type text
-
+    transaction_type text,
+    model text,
     UNIQUE(job_id, rec_type)
 
  )

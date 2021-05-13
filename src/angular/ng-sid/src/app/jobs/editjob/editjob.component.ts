@@ -128,6 +128,9 @@ export class EditjobComponent implements OnInit {
           if(this.selectedJobRecord.run_type == 'A') {
             this.adhocJobFlag = true;
           }
+          else{
+            this.adhocJobFlag = false;
+          }
 
           this.dataloadedflag = true;
           this._loadingService.resolve('loadingsideditjob');
