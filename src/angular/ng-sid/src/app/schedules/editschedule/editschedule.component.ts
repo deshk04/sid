@@ -387,6 +387,7 @@ export class EditscheduleComponent implements OnInit {
 
     if (!this.validate()) {
       console.log('error');
+      return;
     }
     this._loadingService.register('loadingeditschsid');
     // console.log(this.schedule);
@@ -395,6 +396,7 @@ export class EditscheduleComponent implements OnInit {
       (result) => {
         if (result.status != 'ok') {
           this.sidSnackbarComponent.showMessage(result.message);
+          this._loadingService.resolve('loadingeditschsid');
           return;
         }
         this.schedule = result.records;
