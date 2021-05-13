@@ -20,3 +20,6 @@ and t1.rec_type = 'S'
 ;
 
 
+update jobs set run_type = 'R';
+
+-- create insert missing dimension tables

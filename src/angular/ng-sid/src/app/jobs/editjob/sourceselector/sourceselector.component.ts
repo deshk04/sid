@@ -119,7 +119,7 @@ export class SourceselectorComponent implements OnChanges {
     this._loadingService.register('loadingsourcesid');
     this.dimensionDataService.dimensionRecord.subscribe((result) => {
       this._loadingService.resolve('loadingsourcesid');
-      if (result.records) {
+      if (result.status == 'ok') {
         this.dimRef = result.records;
         this.dataloaded = true;
       }
