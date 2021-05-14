@@ -17,12 +17,12 @@ services:
   angular:
     image: ang
     build:
-      context: .
-      dockerfile: ./angular/Dockerfile
+      context: ..
+      dockerfile: ./docker/angular/Dockerfile
     container_name: sid_ng_container
     environment:
       - TZ=Australia/Melbourne
-    env_file: ./.env
+    env_file: ./docker/.env
     volumes:
       - ${REPO_PATH}:/sid/
     ports:
