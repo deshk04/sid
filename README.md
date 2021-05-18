@@ -1,2 +1,33 @@
-# sid
-Data Integration tool for salesforce
+---
+description: Simple ETL tool for Salesforce
+---
+
+# SID
+
+## What is SID?
+
+SID is simple Data Loader environment for Salesforce. with SID you can extract data from multiple connectors and load data to Salesforce. you can also download data from Salesforce
+
+## Why SID?
+
+There are plenty of good ETL , data pipeline tools available which has lots more connectors then SID, then why SID? Most solutions are cloud based or very expensive, to use cloud based solution requires enterprise data to be sent via solution provider which is not always feasible due to enterprise security policies. SID allows you to setup an local Data Loader environment, where you can create new job, schedule job and configure you process as per your need without worry about data access to 3rd party or cloud usage cost.
+
+```
+$ give me super-powers
+```
+
+{% hint style="info" %}
+ Super-powers are granted randomly so please submit an issue if you're not happy with yours.
+{% endhint %}
+
+Once you're strong enough, save the world:
+
+{% code title="hello.sh" %}
+```bash
+# Ain't no code for that yet, sorry
+echo 'You got to trust me on this, I saved the world'
+```
+{% endcode %}
+
+
+
