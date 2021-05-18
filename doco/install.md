@@ -24,6 +24,7 @@ REPO_PATH=c:\download\sid
 ```
 
 ## Build SID
+
 open terminal and change directory to docker under sid repository
 for e.g.
 ```
@@ -38,16 +39,23 @@ $ docker-compose -f docker-compose_demo.yml build
 ```
 $ docker-compose -f docker-compose.yml build
 ```
+*Please dont use demo or development environment for production jobs*
+
 ## Run SID
 Once build is complete without any errors you can run SID
 * for demo environment
 ```
 $ docker-compose -f docker-compose_demo.yml up
 ```
+If you are using demo then you can access SID on port 8080 on your browser
+just open http://localhost:8080/ on your browser
+
 * for development environment
 ```
 $ docker-compose -f docker-compose.yml up
 ```
+If you are using development environment then you can access SID on port 4200 on your browser
+just open http://localhost:4200/ on your browser
 
 
 
