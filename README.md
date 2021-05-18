@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # SID
 Simple ETL tool for Salesforce
 
@@ -12,3 +13,5 @@ There are plenty of good ETL , data pipeline tools available which has lots more
 * [Create a new connector]()
 * [Create a new Job]()
 * [Create a new Schedule]()
+=======
+>>>>>>> 1b8861ee9210873e81b3be8908b4094019da18f8
