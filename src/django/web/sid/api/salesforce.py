@@ -185,6 +185,7 @@ def downloadqueryresult(user_id, source_config):
         fetch data from sf query
     """
     message = []
+    writer = None
     """
         set destination connector as SidLocal
         and run the job to produce the file
