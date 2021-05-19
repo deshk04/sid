@@ -57,6 +57,28 @@ $ docker-compose -f docker-compose.yml up
 If you are using development environment then you can access SID on port 4200 on your browser
 just open http://localhost:4200/ on your browser
 
+## Troubleshoot
+If you are facing problem with angular build, then the following
+* edit entrypoint.sh from docker/angular
+* comment (add # at the begining) last line ng serve
+* uncomment (remove #) while true; do sleep 2; done
+* now build the container as per the above steps
+
+Once angular container is up, connect to the connector and perform the following steps.
+To enter the container
+```
+$ docker exec -it sid_ng_container bash
+```
+Once you are in angular container, try and run the build. you might want to run the following commands first
+```
+$ npm cache clean
+```
+```
+$ npm install
+```
+
+
+
 
 
 
