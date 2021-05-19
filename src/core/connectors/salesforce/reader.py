@@ -105,11 +105,9 @@ class Reader:
                 SalesforceRefusedRequest,
                 SalesforceResourceNotFound,
                 SalesforceError) as sexp:
-            raise SIDException(str(sexp))
+            raise SIDException(str(sexp.content))
         except SalesforceMalformedRequest as sexp:
-            if sexp and sexp.content:
-                raise SIDException(str(sexp.content))
-            raise SIDException(str(sexp))
+            raise SIDException(str(sexp.content))
         except Exception as exp:
             logging.error('Error processing query')
             raise SIDException(str(exp))
