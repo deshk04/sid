@@ -1,5 +1,3 @@
-@import '~@angular/material/theming';
-@import '~@covalent/core/theming/all-theme';
 // @import '~@covalent/markdown/markdown-theme';
 //@import '~@covalent/highlight/highlight-theme';
 @import './sid_theme';
@@ -25,26 +23,18 @@ $typography: mat-typography-config(
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue.
 
-$primary: mat-palette($mat-light-blue, 600);
-$accent:  mat-palette($mat-deep-orange, 800, A100, A400);
-// The warn palette is optional (defaults to red).
-$warn:    mat-palette($mat-red, 600);
-// $warn:  mat-palette($mat-yellow);
+// $primary: mat-palette($mat-light-blue, 600);
+// $accent:  mat-palette($mat-deep-orange, 800, A100, A400);
+// // The warn palette is optional (defaults to red).
+// $warn:    mat-palette($mat-red, 600);
+// // $warn:  mat-palette($mat-yellow);
+
 
 // sid theme
 $primary: mat-palette($theme-primary, 600);
 $accent:  mat-palette($theme-accent, 800, A100, A400);
 // The warn palette is optional (defaults to red).
 $warn:    mat-palette($mat-red, 600);
-
-
-//$primary: mat-palette($primary, 700);
-//$accent:  mat-palette($secondary, 800, A100, A400);
-
-// modified code
-// $primary: $sid-primary;
-// $accent: $sid-accent;
-// $warn: $sid-warn;
 
 
 // Create the theme object (a Sass map containing all of the palettes).
