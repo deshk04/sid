@@ -42,6 +42,7 @@ export class SalesforcequeryComponent implements OnChanges {
   currentPage = 1;
   pageSize = 50;
   filteredData: any[] = [];
+  configColumns: ITdDataTableColumn[] = [];
 
 
   @Input()
@@ -249,6 +250,14 @@ export class SalesforcequeryComponent implements OnChanges {
           else{
             // this.sidSnackbarComponent.showMessage('Query Parsed successful, Please press Next', true);
             this.job.fields = result.records.fields;
+            this.configColumns = [];
+            this.job.fields.forEach(field =>{
+              this.configColumns.push({
+                name: field.field_name,
+                label: field.field_name,
+                width: 200
+              })
+            });
             this.job.model_name = 'sfquery';
             this.sfdata = result.records.records;
             //this.filteredTotal = this.sfdata.length;

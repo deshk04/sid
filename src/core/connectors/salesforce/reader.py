@@ -29,7 +29,7 @@ class Reader:
         self.query_results = []
         self.header_fields = []
         self.normalize = False
-        self.field_sep = '.'
+        self.field_sep = '->'
 
         allowed_fields = set(['user_id', 'run_date', 'config'])
         for field in allowed_fields:
@@ -333,24 +333,26 @@ class Reader:
                     merge with orig_rec_fields
                 """
                 normalized.append(
-                    self.add_missingfields(
+                    self.map_fields(
                         {**orig_rec_fields, **subfields}
                     )
                 )
 
         return normalized
 
-    def add_missingfields(self, record):
+    def map_fields(self, record):
         """
-            add any missing fields
+            map fields and add any missing fields
         """
+        newrecord = {}
         for field in self.header_fields:
             fieldname = field.get('field_name', None)
             if not fieldname:
                 continue
-            if fieldname not in record.keys():
-                record[fieldname] = None
-        return record
+            newrecord[fieldname] = record.get(fieldname, None)
+            # if fieldname not in record.keys():
+            #     record[fieldname] = None
+        return newrecord
 
     def map_record(self, record):
         """
@@ -365,7 +367,7 @@ class Reader:
                     nkey = key + self.field_sep + skey
                     newrecord[nkey] = sval
 
-        return newrecord
+        return self.map_fields(newrecord)
 
     def down(self):
         """

@@ -10,7 +10,6 @@ from django.db.models import Q
 
 from core.general import settings
 from core.general.exceptions import SIDException
-import pdb
 
 class JobController():
     """
