@@ -162,7 +162,7 @@ export class SalesforceComponent implements OnInit {
         (result) => {
           this._loadingService.resolve('loadingsiddimconn');
           if(result.status == 'ok') {
-            this.sidSnackbarComponent.showMessage('Metadata refreshed');
+            this.sidSnackbarComponent.showMessage('Metadata refreshed', true);
           }
           else{
             this.sidSnackbarComponent.showMessage(result.message);

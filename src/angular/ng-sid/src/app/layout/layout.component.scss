@@ -4,10 +4,9 @@ $primary: map-get($theme-primary, primary);
 button {  background-color: mat-color($mat-primary);
 }
 
-mat-sidenav {
-  background-color: mat-color($mat-primary);
-  // color: white;
-}
+// .sidenav {
+//   background-color: mat-color($mat-primary);
+// }
 
 .img-circle {
    background-repeat: no-repeat;
@@ -63,4 +62,9 @@ mat-sidenav {
 
 .font-colour {
   color: white;
+}
+
+.icon-display {
+  transform: scale(2);
+
 }

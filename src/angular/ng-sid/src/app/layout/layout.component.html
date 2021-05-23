@@ -1,5 +1,5 @@
 
-  <td-layout [mode]="'side'" [opened]="true" [sidenavWidth]="'257px'">
+  <td-layout [mode]="'side'" [opened]="true" [sidenavWidth]="'200px'">
     <div *tdLoading="'loadinglayoutsid'; mode:'indeterminate';
     type:'linear'; strategy:'overlay'; color:'primary'">
   </div>
@@ -44,7 +44,7 @@
       <!-- <span> Objects </span> -->
         <mat-nav-list>
           <a mat-list-item class="active" [routerLink]="[ '/connections']" [routerLinkActive]="['is-active']">
-            <mat-icon matListIcon color="primary">share</mat-icon>connectors
+            <mat-icon matListIcon color="primary">share</mat-icon>Connectors
           </a>
         </mat-nav-list>
 
@@ -62,7 +62,7 @@
 
       <mat-nav-list>
         <a mat-list-item class="active" [routerLink]="[ '/schedule']" [routerLinkActive]="['is-active']">
-          <mat-icon matListIcon color="primary">share</mat-icon>Schedule
+          <mat-icon matListIcon color="primary">account_tree</mat-icon>Schedule
         </a>
       </mat-nav-list>
 
@@ -78,6 +78,7 @@
         </a>
       </mat-nav-list>
       <mat-divider></mat-divider>
+      <!-- <h3 matSubheader>Management</h3> -->
       <mat-nav-list>
         <a mat-list-item class="active" [routerLink]="[ '/settings']" [routerLinkActive]="['is-active']">
           <mat-icon matListIcon color="primary">settings</mat-icon>Settings

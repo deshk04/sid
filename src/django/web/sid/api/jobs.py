@@ -185,7 +185,7 @@ def fetchconnectormodels(conn_id):
     """
     query = Q(Q(conn_object_id=conn_id) & Q(name__isnull=False))
     model_records = DmodelsProxy.objects.filter(
-        query).values('name', 'label').order_by('name')
+        query).values('name', 'label').order_by('label')
 
     result = list(model_records)
 

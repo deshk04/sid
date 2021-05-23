@@ -67,15 +67,12 @@ export class JobdetailsComponent implements OnInit {
 
   selectedJob() {
     this._loadingService.register('loadingsidjob');
-    console.log(this.dataloaded);
 
       this.jobsService.getJobbyId(String(this.job_id)).subscribe(
         (result) => {
           this.selectedJobRecord = result.records.jobs[0];
           this._loadingService.resolve('loadingsidjob');
           this.dataloaded = true;
-          console.log(this.dataloaded);
-          console.log(this.selectedJobRecord);
           this._changeDetectorRef.detectChanges();
 
         },
