@@ -148,10 +148,12 @@ class ConnectorMapper():
 
         return None
 
-    def mapmodels(self, modellist=[]):
+    def mapmodels(self, modellist):
         """
             get the model list and map that to dmodel
         """
+        if not modellist:
+            modellist = []
         from core.models.coreproxy import DmodelsProxy
 
         try:
@@ -197,10 +199,13 @@ class ConnectorMapper():
             transaction.rollback()
             raise SIDException('Error storing in database', 'object')
 
-    def mapfields(self, model_name, fieldlist=[]):
+    def mapfields(self, model_name, fieldlist):
         """
             get the model list and map that to dmodel
         """
+        if not fieldlist:
+            fieldlist = []
+
         if not self.connector or not self.user_id:
             raise SIDException('Mandatory Field Missing', 'Connector / User')
 
