@@ -118,13 +118,10 @@ export class EditjobComponent implements OnInit {
             result.records.jobs[0].job_id = -1;
             result.records.jobs[0].job_name = '';
           }
-          console.log(result);
           // this.selectedJobRecord = result.records.jobs[0];
           this.selectedJobRecord = JSON.parse(JSON.stringify(result.records.jobs[0]));
 
           this.origJobRecord = JSON.parse(JSON.stringify(this.selectedJobRecord));
-          console.log('downloaded...');
-          console.log(this.selectedJobRecord);
           if(this.selectedJobRecord.run_type == 'A') {
             this.adhocJobFlag = true;
           }
@@ -247,13 +244,11 @@ export class EditjobComponent implements OnInit {
 
   submitForm(){
 
-    console.log('job..submitted');
 
     // validate the job
     if(!this.validateJob()){
       return;
     }
-    console.log('submitting job..')
     this._loadingService.register('loadingsidjob');
 
     this.jobsService.updateJob(this.selectedJobRecord).subscribe(

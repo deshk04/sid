@@ -62,19 +62,19 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
-    console.log('handle 401');
+    // console.log('handle 401');
     if (!this.isRefreshing) {
-      console.log('Refreshing...');
+      // console.log('Refreshing...');
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null)
 
       return this.userAuthService.refreshToken().pipe(
         switchMap((token) => {
-          console.log('inside switchmap....')
+          // console.log('inside switchmap....')
           this.isRefreshing = false;
           return next.handle(this.addToken(request, token));
         })).pipe(finalize(() => {
-          console.log('inside finalize');
+          // console.log('inside finalize');
           this.isRefreshing = false;
       }));
 
@@ -86,7 +86,7 @@ export class AuthInterceptor implements HttpInterceptor {
       // )
 
     } else {
-      console.log('not refreshing...so sending it to client')
+      // console.log('not refreshing...so sending it to client')
 
           // return next.handle(this.addToken(request,
           //   this.userAuthService.token));
