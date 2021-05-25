@@ -27,6 +27,7 @@ export class SourceselectorComponent implements OnChanges {
   dataloaded: boolean = false;
   editFlag: boolean = false;
   connChangedFlag: boolean = false;
+  connDataSelectedFlag: boolean = false;
 
   disabled: boolean = false;
   enabled: boolean = true;
@@ -99,6 +100,7 @@ export class SourceselectorComponent implements OnChanges {
   selectedConnection(connector: IConnectorDetails) {
     this.connChangedFlag = true;
     this.sfdataloaded = false;
+    this.connDataSelectedFlag = false;
     // this.sourceConnector = connector;
     this.job.source_config.conn_id = connector.conn_id;
     this.job.source_config.conn_name  = connector.name;
@@ -154,6 +156,7 @@ export class SourceselectorComponent implements OnChanges {
             this.job.sourcefields.forEach(function (element) {
               element.model_name  = result.records.config.filestartwith;
             });
+            this.editFlag = false;
 
           }
           else {

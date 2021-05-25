@@ -1,5 +1,9 @@
 
-  <td-layout [mode]="'side'" [opened]="true" [sidenavWidth]="'200px'">
+  <td-layout [mode]="'side'"
+  [opened]="true"
+  [containerAutosize]="false"
+  [sidenavWidth]="'200px'">
+
     <div *tdLoading="'loadinglayoutsid'; mode:'indeterminate';
     type:'linear'; strategy:'overlay'; color:'primary'">
   </div>
@@ -7,7 +11,7 @@
   <div td-sidenav-content>
     <div *ngIf="userLoggedStatus">
 
-    <td-navigation-drawer class="font-colour"
+    <td-navigation-drawer
     flex
     color="primary"
     avatar="{{userProfileRecord.photo}}"
@@ -113,5 +117,15 @@
 
   </mat-sidenav-container>
 
+  <!-- <td-layout-nav toolbarTitle="Sid" navigationRoute="/" fullscreen>
+    <button mat-icon-button td-menu-button tdLayoutToggle>
+      <mat-icon>menu</mat-icon>
+    </button>
+    <ng-snotify></ng-snotify>
+    <div tdMediaToggle="gt-xs" [mediaClasses]="[ 'push-md']" class="layout-container">
+      <router-outlet></router-outlet>
+    </div>
+
+  </td-layout-nav> -->
 
 </td-layout>
