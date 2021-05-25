@@ -12,6 +12,7 @@ There are plenty of good ETL , data pipeline tools available which has lots more
 * [Create a new connector](doco/connector.md)
 * [Create a new Job](doco/job.md)
 * [Create a new Schedule](doco/schedule.md)
+* [Run Job](doco/runjob.md)
 
 Fresh installation requires following objects in the order
 * Connectors (source and destination)
