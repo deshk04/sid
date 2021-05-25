@@ -81,6 +81,8 @@ If you Add or Edit a field mapping, you have few options for Map Type
     * Lookup join field: this field will be joined (queried) against the source field
     * Lookup Return field: this field from lookup table will be mapped to destination field
 
+*For lookup rule, SID fetch's all the data in one query instead of processing the rule on each record. this saves multiple Api calls to salesforce, once the data is downloaded from lookup object SID does the lookup on downloaded dataset instead of running repeated queries on salesforce*
+
 ![Map](images/job_map_4.png "Map")
 
 * ignore
