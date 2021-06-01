@@ -18,3 +18,8 @@ Fresh installation requires following objects in the order
 * Connectors (source and destination)
 * new job which will utilise the above connectors
 * schedule (optional) if you are going to run regular jobs
+
+### To Do List
+* use [Singer Protocol](https://www.singer.io/)
+* support postgres and odbc databases
+* support MS Dynamics
