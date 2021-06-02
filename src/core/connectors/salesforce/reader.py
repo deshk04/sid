@@ -42,7 +42,7 @@ class Reader:
         """
             setup connection
         """
-        logging.debug("SFController: setup")
+        logging.debug("Reader: setup")
 
         self.connect()
         return self.set_reader()

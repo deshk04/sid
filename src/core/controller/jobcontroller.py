@@ -74,7 +74,7 @@ class JobController():
                 """
                     job has been successful before so dont run it
                 """
-                return success
+                return [success, job, job_run]
 
         if mark_complete:
             logging.debug(' mark job as complete')
@@ -85,7 +85,7 @@ class JobController():
             job_run.success_count = 0
 
             job_run.save()
-            return success
+            return [success, job, job_run]
 
         """
                 Let's run the job
@@ -139,7 +139,7 @@ class JobController():
                     log_controller = LogController(
                         user_id=self.user_id
                     )
-                    log_controller.job = self.job
+                    log_controller.job = job
                     log_controller.jobrun = job_run
                     log_controller.execute()
                     message = log_controller.get_summary()
@@ -158,7 +158,7 @@ class JobController():
                 except Exception:
                     logging.error('Error producing log file')
 
-        return success
+        return [success, job, job_run]
 
     def run_job(self,
                 job,
@@ -512,16 +512,10 @@ class JobController():
 
     def reprocess_failures(self, jobrun_id):
         """
-            main function
+            reprocess failed records
         """
-        if not self.run_date:
-            self.run_date = date(2020, 1, 1)
-
-        self.validate()
-        logging.debug('Starting Job: %s', str(self.job_id))
-
-        self.get_job()
-        logging.debug('Processing Job: %s', self.job.job_name)
+        job = self.get_job()
+        logging.debug('Processing Job: %s', job.job_name)
         """
             let's get user settings
         """
@@ -535,30 +529,43 @@ class JobController():
             """
             raise SIDException('User settings missing')
 
+        from core.models.coreproxy import JobrunDetailsProxy
+        records = JobrunDetailsProxy.objects.filter(
+            jobrun_id=jobrun_id,
+            status_code='failure'
+        )
+        if len(records) < 1:
+            """
+                Invalid Job
+            """
+            logging.error('No failure records to process')
+            return
+
         """
-            its a regular job
+            fetch config
         """
         source_config, dest_config = self.get_jobconfig()
 
-        from core.models.coreproxy import JobrunLogProxy
-        jobrun = JobrunLogProxy()
+        writer = self.get_writer(dest_config)
+        writer.setup(None)
 
-        from core.controller.sfcontroller import SFController
-        from core.connectors.file.reader import Reader
+        import ast
+        for jobdetail in records:
+            if jobdetail.processed_record:
+                curr_record = ast.literal_eval(jobdetail.orig_record)
+                writer.write(curr_record, curr_record)
 
-        sf_controller = SFController(
-            user_id=self.user_id
-        )
-        sf_controller.reader = Reader()
-        sf_controller.source_config = source_config
-        sf_controller.dest_config = dest_config
-        sf_controller.jobrun = jobrun
-        sf_controller.parallel_count = 1
-        try:
-            sf_controller.execute_for_failed(jobrun_id)
-        except SIDException as exp:
-            logging.error(str(exp))
-            raise SIDException('Error in execute for failed', '')
+        # if writer.output_object and job_run.total_count > 0:
+        #     failure_count, warning_count = self.save_response(
+        #         job_run, writer.output_object)
+        #     job_run.failure_count = failure_count
+        #     job_run.warning_count = warning_count
+        #     job_run.success_count = job_run.total_count - job_run.failure_count
+        # job_run.message = 'processed'
+        # job_run.status = 'Complete'
+
+        if writer:
+            writer.down()
 
     def save_response(self, jobrun, responserecs):
         """
