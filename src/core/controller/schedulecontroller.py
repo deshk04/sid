@@ -538,7 +538,6 @@ def run_job(job_id, run_date, user_id, rerun_flag,
         job object
         jobrun object
     """
-    status = [job_id, 0, None, None]
     from core.controller.jobcontroller import JobController
 
     job_controller = JobController(
@@ -547,11 +546,8 @@ def run_job(job_id, run_date, user_id, rerun_flag,
         run_date=run_date
     )
 
-    job_controller.schedule_id = schedule_id
-    job_controller.schedulelog_id = schedulelog_id
-    job_controller.mark_complete = mark_complete
     try:
-        return_status = job_controller.execute(
+        return_status, job, job_run = job_controller.execute(
             schedule_id,
             schedulelog_id,
             rerun_flag == 'Y',
@@ -559,29 +555,15 @@ def run_job(job_id, run_date, user_id, rerun_flag,
     except SIDException as exp:
         logging.error('Job failure for %s', job_id)
         logging.error(str(exp))
-        status = [job_id, 0, job_controller.job, job_controller.job_run]
-        return status
+        return [job_id, 0, None, None]
     """
         check the job status
         we check from DB instead of controller as job might have run before
     """
     if not return_status:
-        return [job_id, 2, job_controller.job, None]
+        return [job_id, 2, job, None]
 
     if mark_complete:
-        return [job_id, 1, job_controller.job, None]
+        return [job_id, 1, job, None]
 
-    from core.models.coreproxy import JobrunLogProxy
-
-    jobrun_log = JobrunLogProxy.objects.filter(
-        job_id=job_id,
-        run_date=run_date,
-        status='Complete'
-    ).order_by('-id')
-    if jobrun_log:
-        """
-            we can do something with job run log
-        """
-        return [job_id, 1, job_controller.job, jobrun_log[0]]
-
-    return status
+    return [job_id, 1, job, job_run]

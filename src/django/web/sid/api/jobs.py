@@ -1404,11 +1404,11 @@ def executejobbyjobrunid(user_id, job_id, jobrun_id, run_date):
 
     from core.controller.jobcontroller import JobController
     job_controller = JobController(
-        user_id=user_id
+        user_id=user_id,
+        job_id=job_id,
+        run_date=run_date
     )
-    job_controller.run_date = run_date
     job_controller.rerun_flag = 'Y'
-    job_controller.job_id = job_id
     try:
         job_controller.reprocess_failures(jobrun_id)
     except SIDException as exp:
@@ -1458,7 +1458,8 @@ def runjobbyjobrunid(request):
                             content_type='application/javascript; charset=utf8'
                             )
 
-    run_date = date(2020, 1, 1)
+    if not run_date:
+        run_date = date(2020, 1, 1)
     """
         let's get user's job details
     """

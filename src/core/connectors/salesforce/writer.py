@@ -42,7 +42,7 @@ class Writer:
         """
             setup connection
         """
-        logging.debug("SFController: setup")
+        logging.debug("Writer: setup")
 
         from core.connectors.salesforce.client import SalesforceClient
         sfclient = SalesforceClient()
