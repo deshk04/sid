@@ -1451,7 +1451,7 @@ def runjobbyjobrunid(request):
                             content_type='application/javascript; charset=utf8'
                             )
 
-    if not not jobrun_id:
+    if not jobrun_id:
         response_record.status = 'error'
         response_record.message.append('Input Job run id missing')
         return HttpResponse(response_record.dumpoutput(),

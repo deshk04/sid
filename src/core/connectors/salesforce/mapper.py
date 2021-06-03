@@ -307,8 +307,7 @@ class Mapper:
         logging.debug('Inside execute_query')
         logging.debug(query)
 
-        results = self.reader.query_all(query, False)
-        return results
+        return self.reader.query_all(query, False)
 
     def down(self):
         """

@@ -187,7 +187,6 @@ class JobController():
                         dest_config
                         ):
         from core.models.coreproxy import JobrunLogProxy
-        job_run = None
         """
                 Let's run the job
         """
@@ -542,9 +541,14 @@ class JobController():
             return
 
         """
+            we use the existing jobrun date
+            records[0].jobrun.run_date
+        """
+
+        """
             fetch config
         """
-        source_config, dest_config = self.get_jobconfig()
+        source_config, dest_config = self.get_jobconfig(job_id=job.job_id)
 
         writer = self.get_writer(dest_config)
         writer.setup(None)
@@ -552,20 +556,41 @@ class JobController():
         import ast
         for jobdetail in records:
             if jobdetail.processed_record:
-                curr_record = ast.literal_eval(jobdetail.orig_record)
+                curr_record = ast.literal_eval(jobdetail.processed_record)
                 writer.write(curr_record, curr_record)
-
-        # if writer.output_object and job_run.total_count > 0:
-        #     failure_count, warning_count = self.save_response(
-        #         job_run, writer.output_object)
-        #     job_run.failure_count = failure_count
-        #     job_run.warning_count = warning_count
-        #     job_run.success_count = job_run.total_count - job_run.failure_count
-        # job_run.message = 'processed'
-        # job_run.status = 'Complete'
 
         if writer:
             writer.down()
+
+        from core.models.coreproxy import JobrunLogProxy
+        """
+                Let's run the job
+        """
+        job_run = JobrunLogProxy(
+            sys_creation_date=timezone.now(),
+            user_id=self.user_id,
+            job=job,
+            run_date=records[0].jobrun.run_date,
+            status='Running',
+            filename=None,
+            schedule_id=-1,
+            schedulelog_id=-1,
+            success_count=0,
+            failure_count=0,
+            warning_count=0,
+            total_count=len(records)
+        )
+        job_run.save()
+
+        if writer.output_object:
+            failure_count, warning_count = self.save_response(
+                job_run, writer.output_object)
+            job_run.failure_count = failure_count
+            job_run.warning_count = warning_count
+            job_run.success_count = len(records) - job_run.failure_count
+        job_run.message = 'processed'
+        job_run.status = 'Complete'
+        job_run.save()
 
     def save_response(self, jobrun, responserecs):
         """
