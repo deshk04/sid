@@ -3,6 +3,8 @@
 """
 
 import logging
+# import requests
+# import functools
 from datetime import datetime
 from django.db.models import Q
 
@@ -37,6 +39,8 @@ class SalesforceClient():
             get authentication setup
         """
         self.sfconn = None
+        # session = requests.Session()
+        # session.request = functools.partial(session.request, timeout=600)
 
         logging.debug('Authenticating user')
         try:

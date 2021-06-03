@@ -250,11 +250,16 @@ class ScheduleController():
         )
 
         from core.models.coreproxy import ScheduleConfigProxy, ScheduleLogProxy
+        query = Q(
+            Q(schedule_id=self.schedule.schedule_id) & Q(
+                Q(active_flag='Y') | Q(active_flag__isnull=True)
+            )
+        )
         schedule_steps = ScheduleConfigProxy.objects.filter(
             schedule_id=self.schedule.schedule_id,
             active_flag='Y'
         ).aggregate(Max('job_sequence'))
-        if not schedule_steps:
+        if not schedule_steps or not schedule_steps['job_sequence__max']:
             raise SIDException('Schedule config missing')
 
         self.schedule_log = ScheduleLogProxy(

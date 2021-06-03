@@ -69,4 +69,4 @@ if __name__ == '__main__':
         start
     """
     # extract_csv()
-    reprocess_failures(18, 1223)
+    reprocess_failures(12, 1223)
