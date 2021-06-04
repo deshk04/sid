@@ -39,7 +39,7 @@ services:
   #   ports:
   #     - "6379:6379"
   #   volumes:
-  #       - ./config/redis/redis.conf:/redis.conf
+  #       - ./redis/redis.conf:/redis.conf
   #   command: [ "redis-server", "/redis.conf" ]
   #   restart: always
 
