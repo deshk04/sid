@@ -29,6 +29,21 @@ services:
       - "4200:4200"
     restart: always
 
+  sid_redis:
+    image: redis:latest
+    # build:
+    #   context: ..
+    container_name: sid_redis_container
+    environment:
+      - TZ=Australia/Melbourne
+    # env_file: ./.env
+    ports:
+      - "6379:6379"
+    volumes:
+      - ${REPO_PATH}/docker/redis/redis.conf:/redis.conf
+    command: [ "redis-server", "/redis.conf" ]
+    restart: always
+
   web:
     image: django
     build:
@@ -48,9 +63,10 @@ services:
       - "8080:8080"
     links:
       - sid_database
+      - sid_redis
     depends_on:
       - sid_database
       - angular
-      # - sid_redis
+      - sid_redis
     restart: always
 

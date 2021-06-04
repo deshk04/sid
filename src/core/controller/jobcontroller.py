@@ -1,5 +1,5 @@
 """
-  Description:    Jobs Mapper
+  Description:    Jobs Controller
 """
 import logging
 import ast

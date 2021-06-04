@@ -10,7 +10,6 @@ from core.general.exceptions import SIDException
 from core.general.sidhelper import generate_filename, get_downloadpath
 from core.connectors.file.reader import Reader as FileReader
 
-
 class Reader(FileReader):
     """
         The class responsiblities are:
@@ -62,7 +61,7 @@ class Reader(FileReader):
         """
             If no input file exists then return
         """
-        if not os.path.isfile(self.filename):
+        if not self.filename or not os.path.isfile(self.filename):
             return False
 
         super().set_filename(self.filename)
