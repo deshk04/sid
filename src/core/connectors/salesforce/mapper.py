@@ -3,6 +3,7 @@
 """
 import logging
 from datetime import date
+# import redis
 
 from core.general.exceptions import SIDException
 from core.general.sidhelper import check_dateformat
@@ -21,6 +22,7 @@ class Mapper:
         self.sflookup_recheck = False
         self.lookup_dict = {}
         self.map_hook = None
+        self.redis_conn = None
 
         allowed_fields = set(['user_id', 'run_date', 'config'])
         for field in allowed_fields:
@@ -40,6 +42,11 @@ class Mapper:
 
         from apps.hook.maphook import MapHook
         self.map_hook = MapHook()
+
+        # """
+        #     set up redis
+        # """
+        # self.redis_conn = redis.Redis('sid_redis')
 
     def set_sfreader(self):
         """
@@ -102,7 +109,7 @@ class Mapper:
                 logging.debug(query)
 
                 try:
-                    results = self.execute_query(query)
+                    results = self.reader.query_all(query, False)
                     for reskey, resval in results.items():
                         if reskey == 'records':
                             for rval in resval:
@@ -270,7 +277,7 @@ class Mapper:
         logging.debug(query)
 
         try:
-            results = self.execute_query(query)
+            results = self.reader.query_all(query, False)
             for reskey, resval in results.items():
                 if reskey == 'records':
                     if resval:
@@ -298,16 +305,6 @@ class Mapper:
             return destination object
         """
         return self.modelmapper.dest_model
-
-    def execute_query(self, query):
-        """
-            get look value from SF
-            we assume the model and fields for lookup object is already fetched
-        """
-        logging.debug('Inside execute_query')
-        logging.debug(query)
-
-        return self.reader.query_all(query, False)
 
     def down(self):
         """

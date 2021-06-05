@@ -1,5 +1,5 @@
 """
-  Description:    Salesforce client
+  Description:    awss3 service
 """
 
 import os

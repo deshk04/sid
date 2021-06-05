@@ -1,5 +1,5 @@
 """
-  Description:    Schedule Mapper
+  Description:    Schedule Controller
 """
 from datetime import datetime, date, timedelta
 import logging
