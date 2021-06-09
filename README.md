@@ -18,6 +18,7 @@ Fresh installation requires following objects in the order
 * new job which will utilise the above connectors
 * schedule (optional) if you are going to run regular jobs
 
+If your Salesforce Org has large lookup dataset then either you should have more memory allocated to docker or use the code from redis branch
 ### To Do List
 * use [Singer Protocol](https://www.singer.io/)
 * support postgres and odbc databases
