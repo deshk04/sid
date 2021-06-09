@@ -3,7 +3,6 @@
 """
 import logging
 from datetime import date
-# import redis
 
 from core.general.exceptions import SIDException
 from core.general.sidhelper import check_dateformat
@@ -19,10 +18,11 @@ class Mapper:
         self.modelmapper = None
         self.sfoptimize = True
         self.sflookup_size = 0
-        self.sflookup_recheck = False
+        self.sflookup_recheck = True
         self.lookup_dict = {}
         self.map_hook = None
-        self.redis_conn = None
+        self.cache_conn = None
+        self.cache_loadcount = 50000
 
         allowed_fields = set(['user_id', 'run_date', 'config'])
         for field in allowed_fields:
@@ -37,16 +37,20 @@ class Mapper:
         """
         logging.debug("Salesforce Mapper: setup")
 
+        """
+            set up redis
+        """
+        from core.controller.cachecontroller import CacheController
+        self.cache_conn = CacheController(
+            user_id=self.user_id
+        )
+        self.cache_conn.setup()
+
         self.set_sfreader()
         self.set_mapper()
 
         from apps.hook.maphook import MapHook
         self.map_hook = MapHook()
-
-        # """
-        #     set up redis
-        # """
-        # self.redis_conn = redis.Redis('sid_redis')
 
     def set_sfreader(self):
         """
@@ -83,7 +87,8 @@ class Mapper:
             logging.debug('SFLOOKUP_RECHECK Flag is True')
             self.sflookup_recheck = True
 
-        self.sflookup_size = sid_settings.getkeyvalue_as_num('SFLOOKUP_FILESIZE')
+        self.sflookup_size = sid_settings.getkeyvalue_as_num(
+            'SFLOOKUP_FILESIZE')
         if not self.sflookup_size:
             self.sflookup_size = 0
 
@@ -103,22 +108,36 @@ class Mapper:
                     first we generate a unique key for model
                 """
                 lkey = self.get_lkey(model_map)
-                existing_dict = self.lookup_dict.get(lkey, None)
-                if existing_dict and len(existing_dict) > 0:
-                    continue
+
+                if self.cache_conn.key_exists(lkey):
+                    return True
+
                 logging.debug(query)
 
                 try:
-                    results = self.reader.query_all(query, False)
-                    for reskey, resval in results.items():
-                        if reskey == 'records':
-                            for rval in resval:
-                                record = dict(rval.items())
-                                return_dict[record[model_map['lookup_join_field']]
-                                            ] = record[model_map['lookup_return_field']]
+                    counter = 0
+                    temp_dic = {}
+                    results = self.reader.query_all(query, True)
+                    for rec in results:
+                        counter += 1
+                        record = dict(rec.items())
+                        if not model_map['lookup_join_field']:
+                            continue
+                        temp_dic[record[model_map['lookup_join_field']]] = record[model_map['lookup_return_field']]
+                        if counter > self.cache_loadcount:
+                            self.cache_conn.set_dict(
+                                lkey,
+                                temp_dic
+                            )
+                            temp_dic = {}
+                            counter = 0
+                            # pdb.set_trace()
 
-                    if len(return_dict) > 0:
-                        self.lookup_dict[lkey] = return_dict
+                    if len(temp_dic) > 0:
+                        self.cache_conn.set_dict(
+                            lkey,
+                            temp_dic
+                        )
 
                 except SIDException as sexp:
                     raise sexp
@@ -172,7 +191,8 @@ class Mapper:
                         except SIDException:
                             logging.debug(record)
                             logging.debug(key)
-                            logging.error("Invalid date: %s for %s", str(value), str(key))
+                            logging.error("Invalid date: %s for %s",
+                                          str(value), str(key))
 
                 elif map_field["map_type_id"] == "lookup":
                     """
@@ -220,7 +240,7 @@ class Mapper:
         """
             return unique key
         """
-        lkey = self.config.conn_object.name
+        lkey = str(self.config.conn_object.id)
         lkey += '_' + model_map['lookup_model'].lower()
         lkey += '_' + model_map['lookup_join_field'].lower()
         lkey += '_' + model_map['lookup_return_field'].lower()
@@ -232,24 +252,17 @@ class Mapper:
             if it is fetched then do dict based lookup
             else call sf_lookup
         """
+        if not value:
+            return value
+
         newvalue = None
         if self.sfoptimize:
-            # lookup_model = map_field.get('lookup_model', None)
-            # if lookup_model:
-            #     lkey = self.get_lkey(map_field)
-            #     # tlookup_dict = self.lookup_dict.get(lookup_model, None)
-            #     tlookup_dict = self.lookup_dict.get(lkey, None)
-            #     if tlookup_dict:
-            #         newvalue = tlookup_dict.get(value, None)
-            #         return newvalue
-            if not value:
-                return value
-
             lkey = self.get_lkey(map_field)
             try:
-                newvalue = self.lookup_dict[lkey].get(value, None)
+                newvalue = self.cache_conn.get_key(lkey, value)
                 if newvalue:
                     return newvalue
+
             except Exception:
                 logging.error('Lookup dictionary not found')
                 logging.debug(lkey)

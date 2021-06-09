@@ -51,6 +51,16 @@ class JobController():
             """
             raise SIDException('User settings missing')
 
+        """
+            set up redis
+        """
+        from core.controller.cachecontroller import CacheController
+        self.cache_conn = CacheController(
+            user_id=self.user_id
+        )
+        self.cache_conn.setup()
+        self.cache_conn.cleanup()
+
         job = self.get_job()
         """
             if mark as complete then make the job as success
@@ -187,6 +197,7 @@ class JobController():
                         dest_config
                         ):
         from core.models.coreproxy import JobrunLogProxy
+
         """
                 Let's run the job
         """
