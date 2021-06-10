@@ -213,11 +213,9 @@ class Reader:
 
         try:
             if iter_flag:
-                results = self.sfclient.query_all_iter(query)
-                return results
+                return self.sfclient.query_all_iter(query)
             else:
-                results = self.sfclient.query_all(query)
-                return results
+                return self.sfclient.query_all(query)
 
         except (SalesforceExpiredSession,
                 SalesforceMalformedRequest,
@@ -234,8 +232,7 @@ class Reader:
             logging.debug(
                 'Salesforce General Exception... Rerunning the query')
             try:
-                results = self.sfclient.query_all(query)
-                return results
+                return self.sfclient.query_all(query)
             except Exception:
                 raise SIDException(str(sexp))
         except Exception as exp:

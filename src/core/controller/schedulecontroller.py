@@ -1,5 +1,5 @@
 """
-  Description:    Schedule Mapper
+  Description:    Schedule Controller
 """
 from datetime import datetime, date, timedelta
 import logging
@@ -246,6 +246,14 @@ class ScheduleController():
         logging.debug('run_schedule')
         from core.services.sidsettings import SidSettingsService
         sid_settings = SidSettingsService(
+            user_id=self.user_id
+        )
+
+        """
+            set up cache controller
+        """
+        from core.controller.cachecontroller import CacheController
+        self.cache_conn = CacheController(
             user_id=self.user_id
         )
 

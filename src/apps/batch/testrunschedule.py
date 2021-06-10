@@ -54,7 +54,7 @@ def testrun():
     """
         run the scheduler
     """
-    run_date = date(2021, 5, 31)
+    run_date = date(2021, 6, 8)
     schedule_id = 22
     run_schedule(
         settings.SID_ADMIN,
