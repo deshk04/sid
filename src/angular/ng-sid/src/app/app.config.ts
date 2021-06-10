@@ -20,5 +20,6 @@ export let HOST_ROOT: string;
 //     HOST_ROOT = 'http://localhost:8080/';
 // }
 
+
 HOST_API = 'http://localhost:8080/api/';
 HOST_ROOT = 'http://localhost:8080/';
