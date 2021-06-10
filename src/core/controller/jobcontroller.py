@@ -52,14 +52,12 @@ class JobController():
             raise SIDException('User settings missing')
 
         """
-            set up redis
+            set up cache controller
         """
         from core.controller.cachecontroller import CacheController
         self.cache_conn = CacheController(
             user_id=self.user_id
         )
-        self.cache_conn.setup()
-        self.cache_conn.cleanup()
 
         job = self.get_job()
         """

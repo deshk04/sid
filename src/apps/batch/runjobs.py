@@ -40,5 +40,5 @@ if __name__ == '__main__':
     run_jobs(
         user_id,
         job_id,
-        date(2021, 6, 7)
+        date(2021, 6, 8)
     )

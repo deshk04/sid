@@ -249,6 +249,14 @@ class ScheduleController():
             user_id=self.user_id
         )
 
+        """
+            set up cache controller
+        """
+        from core.controller.cachecontroller import CacheController
+        self.cache_conn = CacheController(
+            user_id=self.user_id
+        )
+
         from core.models.coreproxy import ScheduleConfigProxy, ScheduleLogProxy
         query = Q(
             Q(schedule_id=self.schedule.schedule_id) & Q(

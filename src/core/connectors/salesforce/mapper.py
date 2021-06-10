@@ -18,8 +18,7 @@ class Mapper:
         self.modelmapper = None
         self.sfoptimize = True
         self.sflookup_size = 0
-        self.sflookup_recheck = True
-        self.lookup_dict = {}
+        self.sflookup_recheck = False
         self.map_hook = None
         self.cache_conn = None
         self.cache_loadcount = 50000
@@ -44,7 +43,6 @@ class Mapper:
         self.cache_conn = CacheController(
             user_id=self.user_id
         )
-        self.cache_conn.setup()
 
         self.set_sfreader()
         self.set_mapper()
@@ -108,8 +106,10 @@ class Mapper:
                     first we generate a unique key for model
                 """
                 lkey = self.get_lkey(model_map)
+                logging.debug('key: %s', lkey)
 
                 if self.cache_conn.key_exists(lkey):
+                    logging.debug('dictionary: already exists')
                     return True
 
                 logging.debug(query)
