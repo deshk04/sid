@@ -76,7 +76,7 @@ RUN apt-get update
 RUN apt-get install -y libpq-dev python3-dev cron rsyslog
 RUN touch /var/log/cron.log
 
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt --use-feature=2020-resolver
 
 ARG PG_USER
 ARG PG_PASSWORD
