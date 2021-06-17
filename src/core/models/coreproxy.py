@@ -4,7 +4,7 @@
 
 from django.db import models
 
-from sid.models import AuthSalesforce, Connector, Dmodels
+from sid.models import AuthSalesforce, AuthDatabase, Connector, Dmodels
 from sid.models import Fields, Jobs, ModelMap, Object
 from sid.models import DimConnector, DimSystemType, DimMapType, DimFileMask
 from sid.models import AuthAwsS3, JobrunDetails, JobrunLog
@@ -21,6 +21,16 @@ class AuthSalesforceProxy(AuthSalesforce):
 
     def __init__(self, *args, **kwargs):
         super(AuthSalesforce, self).__init__(*args, **kwargs)
+
+    class Meta:
+        proxy = True
+        app_label = 'sid'
+
+class AuthDatabaseProxy(AuthDatabase):
+    objects = SIDModelManager()
+
+    def __init__(self, *args, **kwargs):
+        super(AuthDatabase, self).__init__(*args, **kwargs)
 
     class Meta:
         proxy = True

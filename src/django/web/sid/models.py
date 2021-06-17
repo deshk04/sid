@@ -34,6 +34,7 @@ class AuthDatabase(models.Model):
     auth_password = models.TextField(blank=True, null=True)
     auth_database = models.TextField(blank=True, null=True)
     auth_host = models.TextField(blank=True, null=True)
+    auth_port = models.TextField(blank=True, null=True)
 
     def __str__(self):
         """

@@ -178,7 +178,7 @@ class LogController():
                 if jobdetail.status_code == 'failure':
                     if jobdetail.orig_record:
                         try:
-                            record = []
+                            # record = []
                             curr_record = jobdetail.orig_record
                             curr_record = ast.literal_eval(
                                 jobdetail.orig_record)
@@ -189,8 +189,9 @@ class LogController():
                             # jstr = jstr.replace(': None,', ': "",')
                             # jstr = jstr.replace(': None}', ': ""')
                             # dictrec = dict(json.loads(jstr))
-                            for key, value in curr_record.items():
-                                record.append(value)
+                            # for key, value in curr_record.items():
+                            #     record.append(value)
+                            record = list(curr_record.values())
 
                             records.append(record)
                             reccount += 1
@@ -198,8 +199,9 @@ class LogController():
                             logging.error('Error in converstion')
 
         if reccount > 0:
-            for key, value in curr_record.items():
-                fields.append(key)
+            # for key, value in curr_record.items():
+            #     fields.append(key)
+            fields = list(curr_record.values())
 
         with open(self.log_file, 'w') as errorfile:
             writer = csv.writer(errorfile, delimiter='|')

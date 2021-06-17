@@ -55,13 +55,14 @@ class TestConnectors(unittest.TestCase):
 
         self.assertListEqual(wheader, rheadero)
 
-        rrecord = []
-        for rec in reader.read():
-            rrecord.append(rec)
+        # rrecord = []
+        # for rec in reader.read():
+        #     rrecord.append(rec)
+        rrecord = [rec for rec in reader.read()]
+
         reader.down()
 
         self.assertDictEqual(wrecord, rrecord[0])
 
         if os.path.isfile(reader.filename):
             os.remove(reader.filename)
-
